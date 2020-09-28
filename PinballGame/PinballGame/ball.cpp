@@ -13,7 +13,8 @@ Ball::Ball(b2World* world, b2Vec2 pos, float radius) {
     shape.m_radius = radius;
 
     b2FixtureDef fixtureDef;
-    fixtureDef.restitution = 1.0f;
+    fixtureDef.friction = 0.36f;
+    fixtureDef.restitution = 0.6f;
     fixtureDef.shape = &shape;
     fixtureDef.density = 1.0f;
 
