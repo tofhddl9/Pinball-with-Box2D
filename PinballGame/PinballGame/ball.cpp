@@ -1,24 +1,36 @@
 #include "ball.h"
 
-Ball::Ball(float x, float y, float radius) {
-    body = nullptr;
-
-    bodyDef.position.Set(x, y);
+Ball::Ball(b2World* world, b2Vec2 pos, float radius) {
+    b2BodyDef bodyDef;
+    bodyDef.position.Set(pos.x, pos.y);
+    bodyDef.angle = 0;
     bodyDef.type = b2_dynamicBody;
     bodyDef.bullet = true;
+    
+    body = world->CreateBody(&bodyDef);
 
+    b2CircleShape shape;
     shape.m_radius = radius;
 
-    fixture.shape = &shape;
-    fixture.density = 1.0f;
-}
+    b2FixtureDef fixtureDef;
+    fixtureDef.restitution = 1.0f;
+    fixtureDef.shape = &shape;
+    fixtureDef.density = 1.0f;
 
-void Ball::CreateBall(b2World* world) {
-    body = world->CreateBody(&bodyDef);
-    body->CreateFixture(&fixture);
+    body->CreateFixture(&fixtureDef);
 }
 
 b2Vec2 Ball::GetPosition()
 {
-    return bodyDef.position;
+    return body->GetPosition();
+}
+
+b2Vec2 Ball::GetVelocity()
+{
+    return body->GetLinearVelocity();
+}
+
+float Ball::GetAngle()
+{
+    return body->GetAngle();
 }

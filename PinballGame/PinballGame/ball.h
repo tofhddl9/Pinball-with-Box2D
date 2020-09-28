@@ -4,17 +4,15 @@
 #include <Box2D/Box2D.h>
 #pragma once
 
-class Ball {
+class Ball{
 public:
-    Ball(float x, float y, float radius);
-    void CreateBall(b2World *world);
+    Ball(b2World* world, b2Vec2 pos, float radius);
     b2Vec2 GetPosition(); 
+    b2Vec2 GetVelocity();
+    float GetAngle();
 
 private:
     b2Body* body;
-    b2BodyDef bodyDef;
-    b2CircleShape shape;
-    b2FixtureDef fixture;
 };
 
 #endif
