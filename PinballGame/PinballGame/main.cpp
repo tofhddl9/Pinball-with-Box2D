@@ -1,37 +1,33 @@
 #include <windows.h>
+#include <vector>
 //#include <gl/gl.h>
 //#include <gl/glu.h>
 #include <gl/glut.h>
 #include <Box2D/Box2D.h>
 
-void display(void)
+#include "pinball.h"
+#include "ball.h"
+
+const int WIDTH = 640;
+const int HEIGHT = 480;
+
+void init()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_PROJECTION);
+    glOrtho(0, WIDTH, HEIGHT, 0, -1, 1);
+    glMatrixMode(GL_MODELVIEW); 
+}
+
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
-    glBegin(GL_TRIANGLES);
-    {
-        glColor3f(0.666, 0.255, 0.255);
-        glVertex2f(0.0f, 0.93f);
-        glColor3f(0.255, 0.666, 0.255);
-        glVertex2f(-0.80f, 0.70f);
-        glColor3f(0.255, 0.255, 0.666);
-        glVertex2f(0.80f, 0.70f);
-    }
-    glEnd();
-
-    glFlush();
 }
 
 int main(int argc, char** argv)
 {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_SINGLE);
-
-    glutInitWindowSize(640, 480);
-    glutCreateWindow("Test Window");
-
-    glutDisplayFunc(display);
-    glutMainLoop();
+    Pinball* pinball_game = new Pinball();
+    pinball_game->Step();
     return 0;
 }
