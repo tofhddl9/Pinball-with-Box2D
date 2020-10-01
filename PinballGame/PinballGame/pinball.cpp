@@ -1,16 +1,36 @@
 #include "pinball.h"
 
-Pinball::Pinball()
+Pinball::Pinball() : wall_(nullptr, body_deleter_)
 {
     CreateWorld();
     CreateWall();
-    //AddBall();
+    AddBall(b2Vec2(0.0f, 10.0f), 1.0f);
 }
 
-void Pinball::AddBall()
+void Pinball::AddBall(b2Vec2 pos, float radius)
 {
-    //Ball_ptr ball = std::make_unique<Ball>(world_, b2Vec2(0, 10.0f), 1.0f);
-    //balls_.emplace_back(ball);
+    //Ball_ptr ball = std::unique_ptr<Ball, decltype(ball_deleter_)> (Ball(world_, b2Vec2(0, 10.0f), 1.0f), ball_deleter_);
+    b2BodyDef body_def;
+    body_def.position.Set(pos.x, pos.y);
+    body_def.angle = 0;
+    body_def.type = b2_dynamicBody;
+    body_def.bullet = true;
+    
+    //body_ = std::make_unique<b2Body, decltype(body_deleter_)>(world->CreateBody(&body_def), body_deleter_);
+    b2Body_ptr ball = std::unique_ptr<b2Body, decltype(body_deleter_)> (world_->CreateBody(&body_def), body_deleter_);
+
+    b2CircleShape shape;
+    shape.m_radius = radius;
+
+    b2FixtureDef fixture_def;
+    fixture_def.density = 1.0f;
+    fixture_def.friction = 0.36f;
+    fixture_def.restitution = 0.6f;
+    fixture_def.shape = &shape;
+
+    ball->CreateFixture(&fixture_def);
+
+    balls_.emplace_back(std::move(ball));
 }
 
 void Pinball::Step()
@@ -35,8 +55,7 @@ void Pinball::CreateWorld()
 void Pinball::CreateWall()
 {
     b2BodyDef body_def;
-    wall_ = std::make_unique<b2Body, void(*)(b2Body *)>
-        (world_->CreateBody(&body_def), [this](b2Body* p){world_->DestroyBody(p); });
+    wall_ = std::unique_ptr<b2Body, decltype(body_deleter_)> (world_->CreateBody(&body_def), body_deleter_);
 
     b2Vec2 wall_point[5];
     wall_point[0].Set(-8.0f, 0.0f);
@@ -51,5 +70,5 @@ void Pinball::CreateWall()
     b2FixtureDef fixture_def;
     fixture_def.shape = &loop;
     fixture_def.density = 0.0f;
-    //wall_->CreateFixture(&fixture_def);
+    wall_->CreateFixture(&fixture_def);
 }
