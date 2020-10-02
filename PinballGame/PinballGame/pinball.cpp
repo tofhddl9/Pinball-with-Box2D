@@ -76,7 +76,7 @@ void Pinball::CreateWall()
     wall_point = new b2Vec2[58];
     {
         wall_point[0].Set(16.5f, -23.5f); //F1
-        wall_point[1].Set(16.5f, -25.0f); //E1
+        wall_point[1].Set(16.5f, -25.3f); //E1
         wall_point[2].Set(-15.5f, -25.0f);//D1
         wall_point[3].Set(-15.5f, -23.5f);//C1
         wall_point[4].Set(-2.0f, -23.5f);//B1
@@ -142,4 +142,24 @@ void Pinball::CreateWall()
     wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 58);
     walls_.push_back(wall);
 
+    //wall_2
+    wall_point = new b2Vec2[13];
+    {
+        wall_point[0].Set(15.0f, -23.6f);//S3
+        wall_point[1].Set(2.0f, -23.5f);//G1
+        wall_point[2].Set(2.0f, -20.0f);//D3
+        wall_point[3].Set(15.0f, -14.0f);//C3
+        wall_point[4].Set(15.0f, -13.0f);//I1
+        wall_point[5].Set(14.0f, -8.0f);//J1
+        wall_point[6].Set(13.5f, -4.5f);//L1
+        wall_point[7].Set(13.0f, -3.0f);//M1
+        wall_point[8].Set(12.5f, -1.5f);//N1
+        wall_point[9].Set(12.6f, 0.4f);//O1
+
+        wall_point[10].Set(13.4f, 2.2f);//P1
+        wall_point[11].Set(14.0f, 4.0f);//Z
+        wall_point[12].Set(14.6f, 6.0f);//Z3
+    }
+    wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 13);
+    walls_.push_back(wall);
 }
