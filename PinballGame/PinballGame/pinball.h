@@ -25,15 +25,9 @@ private:
 
     b2World_ptr world_;
 
-    //TODO : std::vector<Wall *> walls_;
-    //std::vector<b2Body_ptr> wall_;
-    //b2Vec2 wall_point[5];
-    //std::vector<b2Body*> walls_;
-
     std::vector<Wall *> walls_;
 
     std::vector<Ball *> balls_;
-    //std::vector<b2Body_ptr> balls_;
 
     const float32 time_step_ = 1.0f / 30.0f;
     const int32 velocity_iterations_ = 6;

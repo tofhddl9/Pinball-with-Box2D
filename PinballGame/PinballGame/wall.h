@@ -5,15 +5,14 @@
 #include "Box2D/Box2D.h"
 
 enum WALL_TYPE {
-    LINES,
-    LINE_STRIP,
+    LINE_CHAIN,
     LINE_LOOP
 };
 
 class Wall
 {
 public:
-    Wall(b2World* world, WALL_TYPE type, b2Vec2* wall_point, int num_points);
+    Wall(b2World* world, WALL_TYPE type, b2Vec2* wall_points, int num_points);
     void Render();
 
 private:
