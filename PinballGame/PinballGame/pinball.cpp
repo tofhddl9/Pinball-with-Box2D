@@ -162,4 +162,52 @@ void Pinball::CreateWall()
     }
     wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 13);
     walls_.push_back(wall);
+
+    //wall_3
+    wall_point = new b2Vec2[3];
+    {
+        wall_point[0].Set(-5.0f, -17.0f);//A1
+        wall_point[1].Set(-13.0f, -13.0f);//F3
+        wall_point[2].Set(-12.0f, -8.0f);//E3
+    }
+    wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 3);
+    walls_.push_back(wall);
+
+    //wall_4
+    wall_point = new b2Vec2[3];
+    {
+        wall_point[0].Set(5.0f, -17.0f);//H1
+        wall_point[1].Set(13.0f, -13.0f);//B3
+        wall_point[2].Set(12.0f, -8.0f);//A
+    }
+    wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 3);
+    walls_.push_back(wall);
+
+    //wall_5
+    wall_point = new b2Vec2[3];
+    {
+        wall_point[0].Set(-6.0f, 23.6f);//O
+        wall_point[1].Set(-4.6f, 23.8f);//I
+        wall_point[2].Set(-2.6f, 24.0f);//Z1
+    }
+    wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 3);
+    walls_.push_back(wall);
+
+    //wall_6
+    wall_point = new b2Vec2[2];
+    {
+        wall_point[0].Set(-1.5f, 4.0f);//H2
+        wall_point[1].Set(-1.0f, 14.0f);//G2
+    }
+    wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 2);
+    walls_.push_back(wall);
+
+    //wall_7
+    wall_point = new b2Vec2[2];
+    {
+        wall_point[0].Set(1.5f, 4.0f);//R3
+        wall_point[1].Set(1.0f, 14.0f);//Q3
+    }
+    wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 2);
+    walls_.push_back(wall);
 }

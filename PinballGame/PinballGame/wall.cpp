@@ -4,6 +4,7 @@
 Wall::Wall(b2World* world, WALL_TYPE type, b2Vec2* wall_points, int num_points)
 {
     b2BodyDef body_def;
+    body_def.type = b2_staticBody;
     body_ = world->CreateBody(&body_def);
     type_ = type;
     wall_points_ = wall_points;
