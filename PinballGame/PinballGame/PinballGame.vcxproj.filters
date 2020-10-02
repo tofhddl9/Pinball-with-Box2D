@@ -24,12 +24,18 @@
     <ClCompile Include="pinball.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="wall.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="pinball.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="wall.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

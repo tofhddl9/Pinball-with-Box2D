@@ -15,6 +15,7 @@ public:
     b2Vec2 GetVelocity();
     float GetAngle();
     float GetRadius();
+    void Render();
 
 private:
     //std::function<void(b2Body*)> body_deleter_ = [this](b2Body* p) {p->GetWorld()->DestroyBody(p); };

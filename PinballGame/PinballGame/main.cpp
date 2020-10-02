@@ -8,8 +8,8 @@
 #include "pinball.h"
 #include "ball.h"
 
-int WIDTH = 640;
-int HEIGHT = 480;
+int WIDTH = 960;
+int HEIGHT = 1280;
 
 Pinball* pinball;
 bool pause = false;
@@ -35,18 +35,7 @@ void Setup()
 void Render()
 {
 	pinball->Render();
-	
-	// get position and angle by body(ground)
-	b2Vec2 position = pinball->GetGround()->GetPosition();
-	float32 angle = pinball->GetGround()->GetAngle();
 
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glTranslatef(position.x, position.y, 0.0f);	// Translation
-	glRotatef(angle, 0.0f, 0.0f, 1.0f);			// Rotation
-	glColor3f(0.8f, 0.8f, 0.8f);				// Set color
-
-	glutSwapBuffers();
 }
 
 void Update(int value)
@@ -83,7 +72,7 @@ int main(int argc, char** argv)
 	Setup();
 
 	glutDisplayFunc(Render);		//If you want to render, Use it.
-	glutReshapeFunc(Reshape);		//Reshape by window size
+	//glutReshapeFunc(Reshape);		//Reshape by window size
 	glutTimerFunc(20, Update, 0);	//Update physics simulation
 
 	glutKeyboardFunc(PollKeyboard);	//If you want to use keyborad event,
