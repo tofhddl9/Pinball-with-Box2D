@@ -6,13 +6,11 @@
 #include "ball.h"
 #include "wall.h"
 #include "piston.h"
+#include "Flipper.h"
 #include <vector>
 #include <functional>
 
 using b2World_ptr = std::unique_ptr<b2World>;
-
-//using b2Body_ptr = std::unique_ptr<b2Body, std::function<void(b2Body *)>>;
-//using Ball_ptr = std::unique_ptr<Ball, std::function<void(Ball *)>>;
 
 class Pinball 
 {
@@ -21,17 +19,23 @@ public:
     void AddBall();
     void PullPiston();
     void PushPiston(int time);
+   
+    void FlipLeft();
+    void UnflipLeft();
+    void FlipRight();
+    void UnflipRight();
+
     void Step();
     void Render();
 
 private:
-    //std::function<void(b2Body *)> body_deleter_ = [this](b2Body* p) {world_->DestroyBody(p); };
-
     b2World_ptr world_;
 
     std::vector<Wall *> walls_;
     std::vector<Ball *> balls_;
     Piston *piston_;
+    Flipper *leftFlipper_, *rightFlipper_;
+    Flipper* windmill_;
 
     const float32 time_step_ = 1.0f / 30.0f;
     const int32 velocity_iterations_ = 6;
@@ -40,9 +44,14 @@ private:
     void CreateWorld();
     void CreateWall();
     void CreatePiston();
+    void CreateFlippers();
+    Flipper *CreateFlipper(b2Vec2 pivot_pos, b2Vec2 head_pos, const float head_angle, bool is_left);
+    void CreateObstacles();
+    void CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH);
 
     void RenderWall();
     void RenderPiston();
+    void RenderFlipper();
     void RenderBall();
 
     void AddBall(b2Vec2, float);

@@ -6,22 +6,15 @@ Pinball::Pinball()
     CreateWorld();
     CreateWall();
     CreatePiston();
+    CreateFlippers();
+    CreateObstacles();
+
     AddBall();
 }
 
 void Pinball::AddBall()
 {
     AddBall(b2Vec2(15.8f, -13.0f), 0.52f);
-}
-
-void Pinball::PullPiston()
-{
-    piston_->Pull();
-}
-
-void Pinball::PushPiston(int power)
-{
-    piston_->Push(power);
 }
 
 void Pinball::AddBall(b2Vec2 pos, float radius)
@@ -36,8 +29,10 @@ void Pinball::Step()
     for (auto&& ball : balls_) {
         b2Vec2 pos = ball->GetPosition();
         float ang = ball->GetAngle();
-        //printf("x : %f y : %f angle : %f\n", pos.x, pos.y, ang);
     }
+    
+    leftFlipper_->IsKeyDown() ? FlipLeft() : UnflipLeft();
+    rightFlipper_->IsKeyDown() ? FlipRight() : UnflipRight();
 }
 
 void Pinball::Render()
@@ -54,6 +49,7 @@ void Pinball::Render()
 
     RenderWall();
     RenderPiston();
+    RenderFlipper();
     RenderBall();
 
     glutSwapBuffers();
@@ -61,9 +57,8 @@ void Pinball::Render()
 
 void Pinball::RenderWall()
 {
-    for (auto wall : walls_) {
+    for (auto wall : walls_)
         wall->Render();
-    }
 }
 
 void Pinball::RenderPiston()
@@ -71,12 +66,19 @@ void Pinball::RenderPiston()
     piston_->Render();
 }
 
+void Pinball::RenderFlipper()
+{
+    leftFlipper_->Render();
+    rightFlipper_->Render();
+
+    windmill_->Render();
+}
+
 void Pinball::RenderBall()
 {
     for (auto ball : balls_) {
         ball->Render();
     }
-    
 }
 
 void Pinball::CreateWorld()
@@ -254,4 +256,59 @@ void Pinball::CreatePiston()
 {
     piston_ = new Piston(world_.get(), b2Vec2(15.0f, -23.0f),
         b2Vec2(15.75f, -20.0f), 0.55f);
+}
+
+void Pinball::CreateFlippers()
+{
+    leftFlipper_ = CreateFlipper(b2Vec2(-5.0f, -17.1f), b2Vec2(-5.0f, -17.1f), -25.0f * b2_pi / 180.0f, true); //left
+    rightFlipper_ = CreateFlipper(b2Vec2(5.0f, -17.1f), b2Vec2(5.0f, -17.1f), 25.0f * b2_pi / 180.0f, false); //right
+}
+
+Flipper* Pinball::CreateFlipper(const b2Vec2 pivot_pos, const b2Vec2 head_pos, const float head_angle, bool is_left)
+{
+    return new Flipper(world_.get(), pivot_pos, head_pos, head_angle, is_left);
+}
+
+void Pinball::CreateObstacles()
+{
+    CreateWindmill(b2Vec2(6.0f, 15.0f), b2Vec2(1.0f, 0.1f));
+}
+
+void Pinball::CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH)
+{
+    windmill_ = new Flipper(world_.get(), pos, LWH);
+}
+
+void Pinball::PullPiston()
+{
+    piston_->Pull();
+}
+
+void Pinball::PushPiston(int power)
+{
+    piston_->Push(power);
+}
+
+void Pinball::FlipLeft()
+{
+    leftFlipper_->SetIsKeyDown(true);
+    leftFlipper_->Flip();
+}
+
+void Pinball::UnflipLeft()
+{
+    leftFlipper_->SetIsKeyDown(false);
+    leftFlipper_->Unflip();
+}
+
+void Pinball::FlipRight()
+{
+    rightFlipper_->SetIsKeyDown(true);
+    rightFlipper_->Flip();
+}
+
+void Pinball::UnflipRight()
+{
+    rightFlipper_->SetIsKeyDown(false);
+    rightFlipper_->Unflip();
 }

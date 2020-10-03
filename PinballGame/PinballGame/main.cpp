@@ -21,13 +21,20 @@ void PollKeyboard(unsigned char key, int x, int y)
 	case 'p':
 		pause = !pause;
 		break;
-	case ' ':
-		pinball->PullPiston();
-		time++;
-		printf("pressed time : %d\n",time);
-		break;
 	case 'n':
 		pinball->AddBall();
+		break;
+	case ' ':
+		time++;
+		printf("pressed time : %d\n", time);
+		pinball->PullPiston();
+		break;
+	case 'z':
+		pinball->FlipLeft();
+		break;
+	case '/':
+		pinball->FlipRight();
+		break;
 	default:
 		break;
 	}
@@ -41,6 +48,12 @@ void KeyUp(unsigned char key, int x, int y)
 	case ' ':
 		pinball->PushPiston(time);
 		time = 0;
+		break;
+	case 'z':
+		pinball->UnflipLeft();
+		break;
+	case '/':
+		pinball->UnflipRight();
 		break;
 	default:
 		break;
