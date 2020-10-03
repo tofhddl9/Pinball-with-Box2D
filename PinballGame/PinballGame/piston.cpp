@@ -7,20 +7,16 @@ Piston::Piston(b2World *world, const b2Vec2 pivot_pos,
     b2PolygonShape box;
     b2FixtureDef fixture;
 
-    // pivot
     body_def.type = b2_staticBody;
     body_def.position.Set(pivot_pos.x, pivot_pos.y);
     pivot_ = world->CreateBody(&body_def);
 
-    // head
     body_def.type = b2_dynamicBody;
     body_def.position.Set(head_pos.x, head_pos.y);
     head_ = world->CreateBody(&body_def);
     b2CircleShape circle;
     circle.m_radius = head_radius_ = radius;
-    fixture.shape = &circle;
-    fixture.density = 100.0f;
-    head_->CreateFixture(&fixture);
+    head_->CreateFixture(&circle, 100.0f);
 
     CreateJoint(world, pivot_, head_);
 }
@@ -61,14 +57,14 @@ void Piston::Render()
 {
     glPushMatrix();
 
-    glColor3f(0.0f, 1.0f, 0.5f);
+    glColor3f(0.9f, 0.2f, 0.4f);
     glTranslatef(head_->GetPosition().x, head_->GetPosition().y, 0.0f);
     glRotatef(head_->GetAngle(), 0.0f, 0.0f, 1.0f);
 
     float theta;
     glBegin(GL_POLYGON);
     for (int i = 0; i < 360; i++) {
-        theta = 3.142 * i / 180;
+        theta = b2_pi * i / 180;
         glVertex2f(head_radius_ * cos(theta), head_radius_ * sin(theta));
     }
     glEnd();

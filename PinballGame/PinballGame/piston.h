@@ -17,7 +17,7 @@ public:
 private:
     void CreateJoint(b2World* world, b2Body* pivot, b2Body* head);
 
-    const float FORCE_PER_PRESSED_TIME = 200.0;
+    const float FORCE_PER_PRESSED_TIME = 250.0;
     float head_radius_;
     b2Body* head_;
     b2Body* pivot_;

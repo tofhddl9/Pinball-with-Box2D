@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="flipper.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ball.cpp" />
     <ClCompile Include="pinball.cpp" />
@@ -155,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
+    <ClInclude Include="Flipper.h" />
     <ClInclude Include="pinball.h" />
     <ClInclude Include="piston.h" />
     <ClInclude Include="wall.h" />

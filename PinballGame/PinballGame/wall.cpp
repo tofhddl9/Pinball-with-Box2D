@@ -17,10 +17,7 @@ Wall::Wall(b2World* world, const WALL_TYPE type,
     else
         shape.CreateLoop(wall_points, num_points);
 
-    b2FixtureDef fixture_def;
-    fixture_def.shape = &shape;
-    fixture_def.density = 0.0f;
-    body_->CreateFixture(&fixture_def);
+    body_->CreateFixture(&shape, 0.0f);
 
 }
 
@@ -39,9 +36,7 @@ void Wall::Render()
         glBegin(GL_LINE_LOOP);
     
     for (int i = 0; i < num_points_; ++i) {
-        //printf("%f %f\n", wall_points_[i].x, wall_points_[i].y);
         glVertex2f(wall_points_[i].x, wall_points_[i].y);
     }
-    
     glEnd();
 }
