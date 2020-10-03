@@ -1,12 +1,27 @@
 #include "pinball.h"
 #include "GL/glut.h"
 
-Pinball::Pinball()// : wall_(nullptr, body_deleter_)
+Pinball::Pinball()
 {
     CreateWorld();
     CreateWall();
-    AddBall(b2Vec2(0.0f, 10.0f), 1.0f);
-    AddBall(b2Vec2(2.0f, 9.0f), 0.5f);
+    CreatePiston();
+    AddBall();
+}
+
+void Pinball::AddBall()
+{
+    AddBall(b2Vec2(15.8f, -13.0f), 0.52f);
+}
+
+void Pinball::PullPiston()
+{
+    piston_->Pull();
+}
+
+void Pinball::PushPiston(int power)
+{
+    piston_->Push(power);
 }
 
 void Pinball::AddBall(b2Vec2 pos, float radius)
@@ -23,7 +38,6 @@ void Pinball::Step()
         float ang = ball->GetAngle();
         //printf("x : %f y : %f angle : %f\n", pos.x, pos.y, ang);
     }
-    
 }
 
 void Pinball::Render()
@@ -39,7 +53,7 @@ void Pinball::Render()
     gluOrtho2D(-25.0f, 25.0f, -35.0f, 30.0f);
 
     RenderWall();
-
+    RenderPiston();
     RenderBall();
 
     glutSwapBuffers();
@@ -50,6 +64,11 @@ void Pinball::RenderWall()
     for (auto wall : walls_) {
         wall->Render();
     }
+}
+
+void Pinball::RenderPiston()
+{
+    piston_->Render();
 }
 
 void Pinball::RenderBall()
@@ -124,6 +143,7 @@ void Pinball::CreateWall()
         wall_point[42].Set(16.5f, -7.5f);//I2
         wall_point[43].Set(16.5f, -22.0f);//R1
         wall_point[44].Set(15.0f, -22.0f);//B
+        
         wall_point[45].Set(15.0f, -7.4f);//J2
         wall_point[46].Set(15.0f, -2.0f);//K1
         wall_point[47].Set(15.0f, 2.0f);//K2
@@ -210,4 +230,28 @@ void Pinball::CreateWall()
     }
     wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 2);
     walls_.push_back(wall);
+
+    //wall_8
+    wall_point = new b2Vec2[2];
+    {
+        wall_point[0].Set(16.25f, -16.0f);
+        wall_point[1].Set(16.5f, -16.0f);
+    }
+    wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 2);
+    walls_.push_back(wall);
+
+    //wall_9
+    wall_point = new b2Vec2[2];
+    {
+        wall_point[0].Set(15.0f, -16.0f);
+        wall_point[1].Set(15.25f, -16.0f);
+    }
+    wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 2);
+    walls_.push_back(wall);
+}
+
+void Pinball::CreatePiston()
+{
+    piston_ = new Piston(world_.get(), b2Vec2(15.0f, -23.0f),
+        b2Vec2(15.75f, -20.0f), 0.55f);
 }
