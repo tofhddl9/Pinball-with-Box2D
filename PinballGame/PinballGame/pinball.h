@@ -4,7 +4,8 @@
 #pragma once
 #include "Box2D/Box2D.h"
 #include "ball.h"
-#include "Wall.h"
+#include "wall.h"
+#include "piston.h"
 #include <vector>
 #include <functional>
 
@@ -17,6 +18,9 @@ class Pinball
 {
 public:
     Pinball();
+    void AddBall();
+    void PullPiston();
+    void PushPiston(int time);
     void Step();
     void Render();
 
@@ -26,8 +30,8 @@ private:
     b2World_ptr world_;
 
     std::vector<Wall *> walls_;
-
     std::vector<Ball *> balls_;
+    Piston *piston_;
 
     const float32 time_step_ = 1.0f / 30.0f;
     const int32 velocity_iterations_ = 6;
@@ -35,8 +39,10 @@ private:
 
     void CreateWorld();
     void CreateWall();
+    void CreatePiston();
 
     void RenderWall();
+    void RenderPiston();
     void RenderBall();
 
     void AddBall(b2Vec2, float);

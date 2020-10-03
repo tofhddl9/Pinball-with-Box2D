@@ -1,15 +1,15 @@
 #include <windows.h>
 #include <vector>
-//#include <gl/gl.h>
-//#include <gl/glu.h>
 #include <gl/glut.h>
 #include <Box2D/Box2D.h>
 
 #include "pinball.h"
 #include "ball.h"
 
-int WIDTH = 960;
-int HEIGHT = 1280;
+const int WIDTH = 960;
+const int HEIGHT = 1280;
+
+int time = 0;
 
 Pinball* pinball;
 bool pause = false;
@@ -18,13 +18,33 @@ void PollKeyboard(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
-	case ' ':
+	case 'p':
 		pause = !pause;
 		break;
+	case ' ':
+		pinball->PullPiston();
+		time++;
+		printf("pressed time : %d\n",time);
+		break;
+	case 'n':
+		pinball->AddBall();
 	default:
 		break;
 	}
 	glutPostRedisplay();
+}
+
+void KeyUp(unsigned char key, int x, int y)
+{
+	switch (key)
+	{
+	case ' ':
+		pinball->PushPiston(time);
+		time = 0;
+		break;
+	default:
+		break;
+	}
 }
 
 void Setup()
@@ -35,7 +55,6 @@ void Setup()
 void Render()
 {
 	pinball->Render();
-
 }
 
 void Update(int value)
@@ -44,14 +63,7 @@ void Update(int value)
 		pinball->Step();
 	}
 	glutPostRedisplay();
-	glutTimerFunc(20, Update, 0);	//Recursive function
-}
-
-void Reshape(int _width, int _height)
-{
-	WIDTH = _width;
-	HEIGHT = _height;
-	glViewport(0, 0, _width, _height);
+	glutTimerFunc(20, Update, 0);
 }
 
 void display(b2World* world)
@@ -63,20 +75,16 @@ void display(b2World* world)
 
 int main(int argc, char** argv)
 {
-	// Initialize glut
 	glutInitWindowSize(WIDTH, HEIGHT);
 	glutInit(&argc, argv);
 	glutCreateWindow("Pinball");
 
-	// Setting Box2D elements
 	Setup();
 
-	glutDisplayFunc(Render);		//If you want to render, Use it.
-	//glutReshapeFunc(Reshape);		//Reshape by window size
-	glutTimerFunc(20, Update, 0);	//Update physics simulation
-
-	glutKeyboardFunc(PollKeyboard);	//If you want to use keyborad event,
-									//Activate this!
+	glutDisplayFunc(Render);
+	glutTimerFunc(20, Update, 0);
+	glutKeyboardFunc(PollKeyboard);
+	glutKeyboardUpFunc(KeyUp);
 	glutMainLoop();
     return 0;
 }

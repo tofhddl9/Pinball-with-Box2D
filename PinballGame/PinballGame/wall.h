@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Box2D/Box2D.h"
-
+#include <algorithm>
 enum WALL_TYPE {
     LINE_CHAIN,
     LINE_LOOP
@@ -12,7 +12,9 @@ enum WALL_TYPE {
 class Wall
 {
 public:
-    Wall(b2World* world, WALL_TYPE type, b2Vec2* wall_points, int num_points);
+    Wall(b2World* world, const WALL_TYPE type,
+        b2Vec2* wall_points, const int num_points);
+    ~Wall();
     void Render();
 
 private:

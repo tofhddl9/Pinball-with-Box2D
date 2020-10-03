@@ -1,7 +1,8 @@
 #include "wall.h"
 #include "GL/glut.h"
 
-Wall::Wall(b2World* world, WALL_TYPE type, b2Vec2* wall_points, int num_points)
+Wall::Wall(b2World* world, const WALL_TYPE type,
+    b2Vec2* wall_points, const int num_points)
 {
     b2BodyDef body_def;
     body_def.type = b2_staticBody;
@@ -23,6 +24,11 @@ Wall::Wall(b2World* world, WALL_TYPE type, b2Vec2* wall_points, int num_points)
 
 }
 
+Wall::~Wall()
+{
+    delete []wall_points_;
+}
+
 void Wall::Render()
 {
     glPushMatrix();
@@ -33,7 +39,7 @@ void Wall::Render()
         glBegin(GL_LINE_LOOP);
     
     for (int i = 0; i < num_points_; ++i) {
-        printf("%f %f\n", wall_points_[i].x, wall_points_[i].y);
+        //printf("%f %f\n", wall_points_[i].x, wall_points_[i].y);
         glVertex2f(wall_points_[i].x, wall_points_[i].y);
     }
     

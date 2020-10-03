@@ -1,7 +1,7 @@
 #include "ball.h"
 #include "GL/glut.h"
 
-Ball::Ball(b2World* world, b2Vec2 pos, float radius) {
+Ball::Ball(b2World* world, const b2Vec2 pos, const float radius) {
 
     b2BodyDef body_def;
     body_def.position.Set(pos.x, pos.y);

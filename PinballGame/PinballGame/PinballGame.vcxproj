@@ -150,11 +150,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ball.cpp" />
     <ClCompile Include="pinball.cpp" />
+    <ClCompile Include="piston.cpp" />
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
     <ClInclude Include="pinball.h" />
+    <ClInclude Include="piston.h" />
     <ClInclude Include="wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
