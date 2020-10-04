@@ -8,6 +8,9 @@ enum OBJECT_TYPE {
     WINDMILL = 0x10,
     NAIL = 0x20,
     BUMPER = 0x40,
+    REBOUNDER = 0x80
 };
 
-const float BUMPER_ELASTICITY = 7.5f;
+const float BUMPER_ELASTICITY = 1.0f;
+const float REBOUNDER_ELASTICITY = 1.5f;
+const b2Vec2 REBOUNDER_CORRECTION = b2Vec2(0.0f, 2.0f);
