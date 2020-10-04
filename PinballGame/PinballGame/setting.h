@@ -5,6 +5,9 @@ enum OBJECT_TYPE {
     WALL = 0x02,
     PISTON = 0x04,
     FLIPPER = 0x08,
-    NAIL = 0x10,
-    BUMPER = 0x12
+    WINDMILL = 0x10,
+    NAIL = 0x20,
+    BUMPER = 0x40,
 };
+
+const float BUMPER_ELASTICITY = 7.5f;
