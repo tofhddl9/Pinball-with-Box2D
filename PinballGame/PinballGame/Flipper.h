@@ -1,9 +1,7 @@
-#ifndef __FLIPPER_H__
-#define __FLIPPER_H__
 #pragma once
 #include <Box2D/Box2D.h>
 #include <GL/glut.h>
-
+#include "setting.h"
 class Flipper
 {
 public:
@@ -30,4 +28,3 @@ private:
     bool isKeyDown_;
     bool isLeft_;
 };
-#endif

@@ -33,6 +33,12 @@
     <ClCompile Include="flipper.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="bumper.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="contact_listener.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
@@ -48,6 +54,15 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="Flipper.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="bumper.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="contact_listener.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="setting.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

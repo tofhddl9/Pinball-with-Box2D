@@ -1,8 +1,7 @@
-#ifndef __WALL_H__
-#define __WALL_H__
 #pragma once
 
 #include "Box2D/Box2D.h"
+#include "setting.h"
 #include <algorithm>
 enum WALL_TYPE {
     LINE_CHAIN,
@@ -23,5 +22,3 @@ private:
     b2Vec2* wall_points_;
     int num_points_;
 };
-
-#endif

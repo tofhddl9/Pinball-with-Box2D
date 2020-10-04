@@ -147,6 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bumper.cpp" />
+    <ClCompile Include="contact_listener.cpp" />
     <ClCompile Include="flipper.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ball.cpp" />
@@ -156,9 +158,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
+    <ClInclude Include="bumper.h" />
+    <ClInclude Include="contact_listener.h" />
     <ClInclude Include="Flipper.h" />
     <ClInclude Include="pinball.h" />
     <ClInclude Include="piston.h" />
+    <ClInclude Include="setting.h" />
     <ClInclude Include="wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

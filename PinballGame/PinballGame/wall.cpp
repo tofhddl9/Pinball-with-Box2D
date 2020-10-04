@@ -19,6 +19,8 @@ Wall::Wall(b2World* world, const WALL_TYPE type,
 
     body_->CreateFixture(&shape, 0.0f);
 
+    int objectType = WALL;
+    body_->SetUserData((void*)objectType);
 }
 
 Wall::~Wall()

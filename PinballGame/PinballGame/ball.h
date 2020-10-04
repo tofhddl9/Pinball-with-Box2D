@@ -1,8 +1,6 @@
-#ifndef __BALL_H__
-#define __BALL_H__
-
 #pragma once
 #include <Box2D/Box2D.h>
+#include "setting.h"
 using b2World_ptr = std::unique_ptr<b2World>;
 
 class Ball {
@@ -19,5 +17,3 @@ private:
     b2Body *body_;
     float radius_;
 };
-
-#endif

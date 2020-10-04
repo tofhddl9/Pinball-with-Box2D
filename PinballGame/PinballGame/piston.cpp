@@ -18,6 +18,9 @@ Piston::Piston(b2World *world, const b2Vec2 pivot_pos,
     circle.m_radius = head_radius_ = radius;
     head_->CreateFixture(&circle, 100.0f);
 
+    int objectType = PISTON;
+    head_->SetUserData((void*)objectType);
+
     CreateJoint(world, pivot_, head_);
 }
 

@@ -85,6 +85,9 @@ void Flipper::CreateHead(b2World* world, const b2Vec2 head_pos, const float head
 	b2PolygonShape box;
 	box.SetAsBox(2.0f, 0.1f);
 	head_->CreateFixture(&box, 10.0f);
+
+	int objectType = FLIPPER;
+	head_->SetUserData((void*)objectType);
 }
 
 void Flipper::CreateHead(b2World* world, const b2Vec2 head_pos, const b2Vec2 LWH)
@@ -97,6 +100,9 @@ void Flipper::CreateHead(b2World* world, const b2Vec2 head_pos, const b2Vec2 LWH
 	b2PolygonShape box;
 	box.SetAsBox(LWH.x, LWH.y);
 	head_->CreateFixture(&box, 1000.0f);
+
+	int objectType = FLIPPER;
+	head_->SetUserData((void*)objectType);
 }
 
 void Flipper::CreateJoint(b2World* world, const bool is_left)

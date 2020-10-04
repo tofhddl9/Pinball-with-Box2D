@@ -1,9 +1,7 @@
-#ifndef __PISTON_H__
-#define __PISTON_H__
-
 #pragma once
 #include "Box2D/Box2D.h"
 #include "GL/glut.h"
+#include "setting.h"
 
 class Piston
 {
@@ -23,6 +21,3 @@ private:
     b2Body* pivot_;
     b2PrismaticJoint* joint_;
 };
-
-
-#endif

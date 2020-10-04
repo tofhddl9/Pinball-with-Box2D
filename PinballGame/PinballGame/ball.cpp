@@ -21,6 +21,9 @@ Ball::Ball(b2World* world, const b2Vec2 pos, const float radius) {
 
     body_->CreateFixture(&fixture_def);
     radius_ = radius;
+
+    int objectType = BALL;
+    body_->SetUserData((void*)objectType);
 }
 
 b2Vec2 Ball::GetPosition()
