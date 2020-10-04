@@ -13,4 +13,8 @@ public:
 private:
     bool IsContactWithBall(int contactInfo);
     int ContactObjectWithBall(int contactInfo);
+
+    float32 InnerProduct(b2Vec2 va, b2Vec2 vb);
+    b2Vec2 GetRebound(b2Vec2 velocity, b2Vec2 normal);
+    b2Vec2 GetReflection(b2Vec2 velocity, b2Vec2 normal);
 };
