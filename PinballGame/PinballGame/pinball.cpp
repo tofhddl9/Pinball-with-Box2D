@@ -78,8 +78,12 @@ void Pinball::RenderBall()
 void Pinball::RenderObstacles()
 {
     windmill_->Render();
+
     for (auto bumper : bumpers_)
         bumper->Render();
+
+    for (auto rebounder : rebounders_)
+        rebounder->Render();
 }
 
 void Pinball::CreateWorld()
@@ -253,6 +257,26 @@ void Pinball::CreateWall()
     }
     wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 2);
     walls_.push_back(wall);
+
+    //wall_10
+    wall_point = new b2Vec2[3];
+    {
+        wall_point[0].Set(-9.9f, -8.2f);//K3
+        wall_point[1].Set(-10.9f, -12.0f);//L3
+        wall_point[2].Set(-8.1f, -13.6f);//M3
+    }
+    wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 3);
+    walls_.push_back(wall);
+
+    //wall_11
+    wall_point = new b2Vec2[3];
+    {
+        wall_point[0].Set(9.9f, -8.2f);//N3
+        wall_point[1].Set(10.9f, -12.0f);//O3
+        wall_point[2].Set(8.1f, -13.6f);//P3
+    }
+    wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 3);
+    walls_.push_back(wall);
 }
 
 void Pinball::CreatePiston()
@@ -280,6 +304,9 @@ void Pinball::CreateObstacles()
     CreateBumper(b2Vec2(0.5f, 20.5f), 0.7f);
     CreateBumper(b2Vec2(-1.0f, 18.0f), 0.7f);
     CreateBumper(b2Vec2(-9.2f, 23.0f), 1.5f);
+
+    CreateRebounder(b2Vec2(-10.0f, -8.0f), b2Vec2(-8.0f, -13.7f), b2Vec2(-11.0f, -12.0f));
+    CreateRebounder(b2Vec2(10.0f, -8.0f), b2Vec2(8.0f, -13.7f), b2Vec2(11.0f, -12.0f));
 }
 
 void Pinball::CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH)
@@ -290,6 +317,11 @@ void Pinball::CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH)
 void Pinball::CreateBumper(const b2Vec2 pos, const float radius)
 {
     bumpers_.push_back(new Bumper(world_.get(), pos, radius));
+}
+
+void Pinball::CreateRebounder(const b2Vec2 p1, const b2Vec2 p2, const b2Vec2 other)
+{
+    rebounders_.push_back(new Rebounder(world_.get(), p1, p2, other));
 }
 
 void Pinball::PullPiston()
