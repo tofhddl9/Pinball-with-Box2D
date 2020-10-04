@@ -8,14 +8,37 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
     b2Fixture* fa = contact->GetFixtureA();
     b2Fixture* fb = contact->GetFixtureB();
 
-    b2Body* ba = fa->GetBody();
-    b2Body* bb = fb->GetBody();
+    b2Body* bodyA = fa->GetBody();
+    b2Body* bodyB = fb->GetBody();
 
-    if ((int)ba->GetUserData() == 4 && (int)bb->GetUserData() == 1) {
-        bb->ApplyLinearImpulse(b2Vec2(100.f, 0.0f), bb->GetPosition(), true);
+    int contactInfo = (int)bodyA->GetUserData() + (int)bodyB->GetUserData();
+    if (IsContactWithBall(contactInfo)) {
+        b2WorldManifold wm;
+        contact->GetWorldManifold(&wm);
+        int contactObjectWithBall = ContactObjectWithBall(contactInfo);
+
+        // todo : give score
+        switch (contactObjectWithBall) {
+        case(WINDMILL):
+            break;
+        case(BUMPER):
+            bodyB->ApplyLinearImpulse(BUMPER_ELASTICITY * wm.normal, bodyB->GetPosition(), true);
+            break;
+        }
     }
 }
 
 void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {}
 
 void ContactListener::EndContact(b2Contact* contact) {}
+
+
+bool ContactListener::IsContactWithBall(int contactInfo)
+{
+    return (contactInfo & BALL) > 0;
+}
+
+int ContactListener::ContactObjectWithBall(int contactInfo)
+{
+    return (contactInfo ^ BALL);
+}
