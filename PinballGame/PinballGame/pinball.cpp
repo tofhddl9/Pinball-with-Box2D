@@ -26,11 +26,7 @@ void Pinball::AddBall(b2Vec2 pos, float radius)
 void Pinball::Step()
 {
     world_->Step(time_step_, velocity_iterations_, position_iterations_);
-    for (auto&& ball : balls_) {
-        b2Vec2 pos = ball->GetPosition();
-        float ang = ball->GetAngle();
-    }
-    
+  
     leftFlipper_->IsKeyDown() ? FlipLeft() : UnflipLeft();
     rightFlipper_->IsKeyDown() ? FlipRight() : UnflipRight();
 }
@@ -51,6 +47,7 @@ void Pinball::Render()
     RenderPiston();
     RenderFlipper();
     RenderBall();
+    RenderObstacles();
 
     glutSwapBuffers();
 }
@@ -70,15 +67,19 @@ void Pinball::RenderFlipper()
 {
     leftFlipper_->Render();
     rightFlipper_->Render();
-
-    windmill_->Render();
 }
 
 void Pinball::RenderBall()
 {
-    for (auto ball : balls_) {
+    for (auto ball : balls_)
         ball->Render();
-    }
+}
+
+void Pinball::RenderObstacles()
+{
+    windmill_->Render();
+    for (auto bumper : bumpers_)
+        bumper->Render();
 }
 
 void Pinball::CreateWorld()
@@ -86,6 +87,8 @@ void Pinball::CreateWorld()
     b2Vec2 gravity;
     gravity.Set(0.0f, -9.8f);
     world_ = std::make_unique<b2World>(gravity);
+
+    world_->SetContactListener(&contactListener_);
 }
 
 void Pinball::CreateWall()
@@ -208,9 +211,9 @@ void Pinball::CreateWall()
     //wall_5
     wall_point = new b2Vec2[3];
     {
-        wall_point[0].Set(-6.0f, 23.6f);//O
-        wall_point[1].Set(-4.6f, 23.8f);//I
-        wall_point[2].Set(-2.6f, 24.0f);//Z1
+        wall_point[0].Set(-6.0f, 23.4f);//O
+        wall_point[1].Set(-4.6f, 23.6f);//I
+        wall_point[2].Set(-2.6f, 23.8f);//Z1
     }
     wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 3);
     walls_.push_back(wall);
@@ -227,7 +230,7 @@ void Pinball::CreateWall()
     //wall_7
     wall_point = new b2Vec2[2];
     {
-        wall_point[0].Set(1.5f, 4.0f);//R3
+        wall_point[0].Set(0.5f, 4.0f);//R3
         wall_point[1].Set(1.0f, 14.0f);//Q3
     }
     wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 2);
@@ -272,11 +275,21 @@ Flipper* Pinball::CreateFlipper(const b2Vec2 pivot_pos, const b2Vec2 head_pos, c
 void Pinball::CreateObstacles()
 {
     CreateWindmill(b2Vec2(6.0f, 15.0f), b2Vec2(1.0f, 0.1f));
+    
+    CreateBumper(b2Vec2(-2.0f, 20.0f), 0.7f);
+    CreateBumper(b2Vec2(0.5f, 20.5f), 0.7f);
+    CreateBumper(b2Vec2(-1.0f, 18.0f), 0.7f);
+    CreateBumper(b2Vec2(-9.2f, 23.0f), 1.5f);
 }
 
 void Pinball::CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH)
 {
     windmill_ = new Flipper(world_.get(), pos, LWH);
+}
+
+void Pinball::CreateBumper(const b2Vec2 pos, const float radius)
+{
+    bumpers_.push_back(new Bumper(world_.get(), pos, radius));
 }
 
 void Pinball::PullPiston()

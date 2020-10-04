@@ -1,14 +1,13 @@
-#ifndef __PINBALL_H__
-#define __PINBALL_H__
-
 #pragma once
 #include "Box2D/Box2D.h"
+#include "contact_listener.h"
+#include "setting.h"
 #include "ball.h"
 #include "wall.h"
 #include "piston.h"
 #include "Flipper.h"
+#include "bumper.h"
 #include <vector>
-#include <functional>
 
 using b2World_ptr = std::unique_ptr<b2World>;
 
@@ -30,12 +29,15 @@ public:
 
 private:
     b2World_ptr world_;
+    ContactListener contactListener_;
 
     std::vector<Wall *> walls_;
     std::vector<Ball *> balls_;
     Piston *piston_;
     Flipper *leftFlipper_, *rightFlipper_;
+    
     Flipper* windmill_;
+    std::vector<Bumper*> bumpers_;
 
     const float32 time_step_ = 1.0f / 30.0f;
     const int32 velocity_iterations_ = 6;
@@ -48,13 +50,13 @@ private:
     Flipper *CreateFlipper(b2Vec2 pivot_pos, b2Vec2 head_pos, const float head_angle, bool is_left);
     void CreateObstacles();
     void CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH);
+    void CreateBumper(const b2Vec2 pos, const float raius);
 
     void RenderWall();
     void RenderPiston();
     void RenderFlipper();
     void RenderBall();
+    void RenderObstacles();
 
     void AddBall(b2Vec2, float);
 };
-
-#endif
