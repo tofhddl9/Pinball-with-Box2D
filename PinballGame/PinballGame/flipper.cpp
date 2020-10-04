@@ -101,7 +101,7 @@ void Flipper::CreateHead(b2World* world, const b2Vec2 head_pos, const b2Vec2 LWH
 	box.SetAsBox(LWH.x, LWH.y);
 	head_->CreateFixture(&box, 1000.0f);
 
-	int objectType = FLIPPER;
+	int objectType = WINDMILL;
 	head_->SetUserData((void*)objectType);
 }
 
