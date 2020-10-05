@@ -6,6 +6,7 @@
 class Circle {
 public:
     virtual void Render() = 0;
+    void RenderCircle();
 
 protected:
     b2Body* body_;

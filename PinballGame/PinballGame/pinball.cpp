@@ -14,7 +14,8 @@ Pinball::Pinball()
 
 void Pinball::AddBall()
 {
-    AddBall(b2Vec2(15.8f, -13.0f), 0.52f);
+    //AddBall(b2Vec2(15.8f, -13.0f), 0.6f);
+    AddBall(b2Vec2(10.0f, 10.0f), 0.6f);
 }
 
 void Pinball::AddBall(b2Vec2 pos, float radius)
@@ -23,10 +24,27 @@ void Pinball::AddBall(b2Vec2 pos, float radius)
     balls_.emplace_back(ball);
 }
 
+void Pinball::RemoveBallToBeDeleted()
+{
+    auto it_start = balls_.begin();
+    auto it_end = balls_.end();
+    for (auto it = it_start; it != it_end; ++it) {
+        b2Body* body = (*it)->GetBody();
+        float32 radius = body->GetFixtureList()->GetShape()->m_radius;
+        if ((int)body->GetUserData() == REMOVABLE_BALL) {
+            balls_.erase(it);
+            delete (*it);
+            AddBall(WORMHOLE_DESTINATION , std::max(0.4f, radius * 0.8f));
+        }
+    }
+}
+
 void Pinball::Step()
 {
     world_->Step(time_step_, velocity_iterations_, position_iterations_);
-  
+
+    RemoveBallToBeDeleted();
+
     leftFlipper_->IsKeyDown() ? FlipLeft() : UnflipLeft();
     rightFlipper_->IsKeyDown() ? FlipRight() : UnflipRight();
 }
@@ -40,7 +58,7 @@ void Pinball::Render()
     glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
+
     gluOrtho2D(-25.0f, 25.0f, -35.0f, 30.0f);
 
     RenderWall();
@@ -77,13 +95,18 @@ void Pinball::RenderBall()
 
 void Pinball::RenderObstacles()
 {
-    windmill_->Render();
+    for (auto windmill : windmills_)
+        windmill->Render();
 
     for (auto bumper : bumpers_)
         bumper->Render();
 
     for (auto rebounder : rebounders_)
         rebounder->Render();
+
+    for (auto wormhole : wormholes_)
+        wormhole->Render();
+
 }
 
 void Pinball::CreateWorld()
@@ -152,7 +175,7 @@ void Pinball::CreateWall()
         wall_point[42].Set(16.5f, -7.5f);//I2
         wall_point[43].Set(16.5f, -22.0f);//R1
         wall_point[44].Set(15.0f, -22.0f);//B
-        
+
         wall_point[45].Set(15.0f, -7.4f);//J2
         wall_point[46].Set(15.0f, -2.0f);//K1
         wall_point[47].Set(15.0f, 2.0f);//K2
@@ -243,7 +266,7 @@ void Pinball::CreateWall()
     //wall_8
     wall_point = new b2Vec2[2];
     {
-        wall_point[0].Set(16.25f, -16.0f);
+        wall_point[0].Set(16.1f, -16.0f); //start point
         wall_point[1].Set(16.5f, -16.0f);
     }
     wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 2);
@@ -253,7 +276,7 @@ void Pinball::CreateWall()
     wall_point = new b2Vec2[2];
     {
         wall_point[0].Set(15.0f, -16.0f);
-        wall_point[1].Set(15.25f, -16.0f);
+        wall_point[1].Set(15.4f, -16.0f);
     }
     wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 2);
     walls_.push_back(wall);
@@ -282,7 +305,7 @@ void Pinball::CreateWall()
 void Pinball::CreatePiston()
 {
     piston_ = new Piston(world_.get(), b2Vec2(15.0f, -23.0f),
-        b2Vec2(15.75f, -20.0f), 0.55f);
+        b2Vec2(15.75f, -20.0f), 0.50f);
 }
 
 void Pinball::CreateFlippers()
@@ -299,7 +322,7 @@ Flipper* Pinball::CreateFlipper(const b2Vec2 pivot_pos, const b2Vec2 head_pos, c
 void Pinball::CreateObstacles()
 {
     CreateWindmill(b2Vec2(6.0f, 15.0f), b2Vec2(1.0f, 0.1f));
-    
+
     CreateBumper(b2Vec2(-2.0f, 20.0f), 0.7f);
     CreateBumper(b2Vec2(0.5f, 20.5f), 0.7f);
     CreateBumper(b2Vec2(-1.0f, 18.0f), 0.7f);
@@ -307,11 +330,13 @@ void Pinball::CreateObstacles()
 
     CreateRebounder(b2Vec2(-10.0f, -8.0f), b2Vec2(-8.0f, -13.7f), b2Vec2(-11.0f, -12.0f));
     CreateRebounder(b2Vec2(10.0f, -8.0f), b2Vec2(8.0f, -13.7f), b2Vec2(11.0f, -12.0f));
+
+    CreateWormhole(b2Vec2(10.0f, 18.0f), 0.5f);
 }
 
 void Pinball::CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH)
 {
-    windmill_ = new Flipper(world_.get(), pos, LWH);
+    windmills_.push_back(new Flipper(world_.get(), pos, LWH));
 }
 
 void Pinball::CreateBumper(const b2Vec2 pos, const float radius)
@@ -322,6 +347,11 @@ void Pinball::CreateBumper(const b2Vec2 pos, const float radius)
 void Pinball::CreateRebounder(const b2Vec2 p1, const b2Vec2 p2, const b2Vec2 other)
 {
     rebounders_.push_back(new Rebounder(world_.get(), p1, p2, other));
+}
+
+void Pinball::CreateWormhole(const b2Vec2 src, const float radius)
+{
+    wormholes_.push_back(new Wormhole(world_.get(), src, radius));
 }
 
 void Pinball::PullPiston()
