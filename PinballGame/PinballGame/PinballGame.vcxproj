@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bumper.cpp" />
+    <ClCompile Include="circle.cpp" />
     <ClCompile Include="contact_listener.cpp" />
     <ClCompile Include="flipper.cpp" />
     <ClCompile Include="main.cpp" />

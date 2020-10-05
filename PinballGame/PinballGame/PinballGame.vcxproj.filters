@@ -45,6 +45,9 @@
     <ClCompile Include="wormhole.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="circle.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
