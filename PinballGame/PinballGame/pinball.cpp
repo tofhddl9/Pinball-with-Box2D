@@ -318,10 +318,10 @@ void Pinball::CreateWall()
     {
         wall_point[0].Set(-13.3f, 14.0f);//D5
         wall_point[1].Set(-13.1f, 16.4f);//E5
-        wall_point[2].Set(-12.9f, 17.8f);//F5
-        wall_point[3].Set(-12.5f, 18.8f);//G5
-        wall_point[4].Set(-11.9f, 19.9f);//M4
-        wall_point[5].Set(-11.0f, 20.8f);//O4
+        wall_point[2].Set(-13.0f, 18.0f);//F5
+        wall_point[3].Set(-12.45f, 19.0f);//G5
+        wall_point[4].Set(-11.8f, 19.9f);//M4
+        wall_point[5].Set(-10.9f, 20.7f);//O4
     }
     wall = new Wall(world_.get(), LINE_CHAIN, wall_point, 6);
     walls_.push_back(wall);
