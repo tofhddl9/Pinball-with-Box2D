@@ -11,12 +11,12 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
     b2Body* bodyB = fb->GetBody();
 
     int contactInfo = (int)bodyA->GetUserData() + (int)bodyB->GetUserData();
+
     if (IsContactWithBall(contactInfo)) {
         b2WorldManifold wm;
         contact->GetWorldManifold(&wm);
         int contactObjectWithBall = ContactObjectWithBall(contactInfo);
 
-        // todo : give score
         switch (contactObjectWithBall) {
         case WINDMILL:
             break;
@@ -25,17 +25,54 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
             bodyB->ApplyLinearImpulse(BUMPER_ELASTICITY * reflection, bodyB->GetPosition(), true);
             break;
         }
-        case REBOUNDER:
+        case REBOUNDER: {
             b2Vec2 rebound = GetRebound(bodyB->GetLinearVelocity(), wm.normal);
             bodyB->ApplyLinearImpulse(REBOUNDER_ELASTICITY * rebound, bodyB->GetPosition(), true);
             break;
+        }
+        case WORMHOLE: {
+            break;
+        }
+
         }
     }
 }
 
 void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {}
 
-void ContactListener::EndContact(b2Contact* contact) {}
+void ContactListener::EndContact(b2Contact* contact)
+{
+    b2Fixture* fa = contact->GetFixtureA();
+    b2Fixture* fb = contact->GetFixtureB();
+
+    b2Body* bodyA = fa->GetBody();
+    b2Body* bodyB = fb->GetBody();
+
+    int contactInfo = (int)bodyA->GetUserData() + (int)bodyB->GetUserData();
+
+    if (IsContactWithBall(contactInfo)) {
+        b2WorldManifold wm;
+        contact->GetWorldManifold(&wm);
+        int contactObjectWithBall = ContactObjectWithBall(contactInfo);
+
+        switch (contactObjectWithBall) {
+        case WINDMILL: {
+            break;
+        }
+        case BUMPER: {
+            break;
+        }
+        case REBOUNDER: {
+            break;
+        }
+        case WORMHOLE: {
+            bodyB->SetUserData((void*)REMOVABLE_BALL);
+            break;
+        }
+
+        }
+    }
+}
 
 bool ContactListener::IsContactWithBall(int contactInfo)
 {

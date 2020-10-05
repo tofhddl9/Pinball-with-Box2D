@@ -31,11 +31,13 @@ void Rebounder::Render()
 {
     glPushMatrix();
 
-    glColor3f(0.2f, 0.5f, 1.0f);
+    //glColor3f(0.2f, 0.5f, 1.0f);
     glBegin(GL_POLYGON);
     {
+        glColor3f(0.2f, 0.5f, 1.0f);
         glVertex2f(p1_.x, p1_.y);
         glVertex2f(p2_.x, p2_.y);
+        glColor3f(0.1f, 0.0f, 0.0f);
         glVertex2f(other_.x, other_.y);
     }
     glEnd();

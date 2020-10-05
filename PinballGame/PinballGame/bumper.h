@@ -1,16 +1,9 @@
 #pragma once
+#include "circle.h"
 
-#include <Box2D/Box2D.h>
-#include <GL/glut.h>
-#include "setting.h"
-
-class Bumper
+class Bumper : Circle
 {
 public:
     Bumper(b2World *world, const b2Vec2 pos, const float radius);
-    void Render();
-
-private:
-    b2Body* body_;
-    float radius_;
+    virtual void Render();
 };

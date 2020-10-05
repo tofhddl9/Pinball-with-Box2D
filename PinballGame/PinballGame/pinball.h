@@ -8,6 +8,8 @@
 #include "Flipper.h"
 #include "bumper.h"
 #include "rebounder.h"
+#include "wormhole.h"
+
 #include <vector>
 
 using b2World_ptr = std::unique_ptr<b2World>;
@@ -28,22 +30,25 @@ public:
     void Step();
     void Render();
 
+    //std::vector<b2Body*> balls_;
 private:
     b2World_ptr world_;
     ContactListener contactListener_;
 
     std::vector<Wall *> walls_;
     std::vector<Ball *> balls_;
+
     Piston *piston_;
     Flipper *leftFlipper_, *rightFlipper_;
     
-    Flipper* windmill_;
+    std::vector<Flipper*> windmills_;
     std::vector<Bumper*> bumpers_;
     std::vector<Rebounder*> rebounders_;
+    std::vector<Wormhole*> wormholes_;
 
     const float32 time_step_ = 1.0f / 30.0f;
-    const int32 velocity_iterations_ = 6;
-    const int32 position_iterations_ = 2;
+    const int32 velocity_iterations_ = 20;
+    const int32 position_iterations_ = 16;
 
     void CreateWorld();
     void CreateWall();
@@ -54,6 +59,7 @@ private:
     void CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH);
     void CreateBumper(const b2Vec2 pos, const float raius);
     void CreateRebounder(const b2Vec2 p1, const b2Vec2 p2, const b2Vec2 other);
+    void CreateWormhole(const b2Vec2 src, const float radius);
 
     void RenderWall();
     void RenderPiston();
@@ -61,5 +67,6 @@ private:
     void RenderBall();
     void RenderObstacles();
 
-    void AddBall(b2Vec2, float);
+    void AddBall(b2Vec2 pos, float radius);
+    void RemoveBallToBeDeleted();
 };
