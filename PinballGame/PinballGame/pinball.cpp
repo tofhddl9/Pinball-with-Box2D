@@ -5,6 +5,7 @@ Pinball::Pinball()
 {
     CreateWorld();
     CreateWall();
+    CreateStars();
     CreatePiston();
     CreateFlippers();
     CreateObstacles();
@@ -67,6 +68,7 @@ void Pinball::Render()
     gluOrtho2D(-26.0f, 25.0f, -35.0f, 30.0f);
 
     RenderWall();
+    RenderStar();
     RenderPiston();
     RenderFlipper();
     RenderBall();
@@ -79,6 +81,12 @@ void Pinball::RenderWall()
 {
     for (auto wall : walls_)
         wall->Render();
+}
+
+void Pinball::RenderStar()
+{
+    for (auto star : stars_)
+        star->Render();
 }
 
 void Pinball::RenderPiston()
@@ -356,6 +364,31 @@ void Pinball::CreateWall()
     wall = new Wall(world_.get(), LINE_LOOP, wall_point, 3);
     walls_.push_back(wall);
 
+}
+
+void Pinball::CreateStars()
+{
+    CreateStar(b2Vec2(-12.0f, 20.35f), 0.35f, STAR_LARGE);
+    CreateStar(b2Vec2(-12.95f, 19.1f), 0.35f, STAR_LARGE);
+    CreateStar(b2Vec2(-13.55f, 17.0f), 0.35f, STAR_LARGE);
+    CreateStar(b2Vec2(-13.75f, 15.5f), 0.35f, STAR_LARGE);
+
+    CreateStar(b2Vec2(-11.75f, 23.0f), 0.35f, STAR_LARGE);
+    CreateStar(b2Vec2(-11.15f, 25.0f), 0.35f, STAR_LARGE);
+    CreateStar(b2Vec2(-9.5f, 25.5f), 0.35f, STAR_LARGE);
+
+    CreateStar(b2Vec2(9.5f, 20.7f), 0.35f, STAR_SMALL);
+    CreateStar(b2Vec2(8.0f, 21.7f), 0.35f, STAR_SMALL);
+    CreateStar(b2Vec2(6.5f, 22.3f), 0.35f, STAR_SMALL);
+
+    CreateStar(b2Vec2(-0.5f, 10.5f), 0.35f, STAR_SMALL);
+    CreateStar(b2Vec2(-0.7f, 8.5f), 0.35f, STAR_SMALL);
+    CreateStar(b2Vec2(-0.9f, 6.5f), 0.35f, STAR_SMALL);
+}
+
+void Pinball::CreateStar(b2Vec2 pos, const float centerToVertex, const int type)
+{
+    stars_.push_back(new Star(world_.get(), pos, centerToVertex, type));
 }
 
 void Pinball::CreatePiston()

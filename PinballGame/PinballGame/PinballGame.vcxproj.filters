@@ -48,6 +48,9 @@
     <ClCompile Include="circle.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="star.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
@@ -81,6 +84,9 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="wormhole.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="star.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -156,6 +156,7 @@
     <ClCompile Include="pinball.cpp" />
     <ClCompile Include="piston.cpp" />
     <ClCompile Include="rebounder.cpp" />
+    <ClCompile Include="star.cpp" />
     <ClCompile Include="wall.cpp" />
     <ClCompile Include="wormhole.cpp" />
   </ItemGroup>
@@ -169,6 +170,7 @@
     <ClInclude Include="piston.h" />
     <ClInclude Include="rebounder.h" />
     <ClInclude Include="setting.h" />
+    <ClInclude Include="star.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="wormhole.h" />
   </ItemGroup>

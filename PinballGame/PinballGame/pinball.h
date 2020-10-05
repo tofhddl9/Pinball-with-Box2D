@@ -4,6 +4,7 @@
 #include "contact_listener.h"
 #include "setting.h"
 #include "ball.h"
+#include "star.h"
 #include "wall.h"
 #include "piston.h"
 #include "flipper.h"
@@ -39,7 +40,8 @@ private:
 
     std::vector<Wall *> walls_;
     std::vector<Ball *> balls_;
-    
+    std::vector<Star*> stars_;
+
     Piston *piston_;
     Flipper *leftFlipper_, *rightFlipper_;
     
@@ -54,6 +56,9 @@ private:
 
     void CreateWorld();
     void CreateWall();
+    void CreateStars();
+    void CreateStar(b2Vec2 pos, const float centerToVertex, const int type);
+
     void CreatePiston();
     void CreateFlippers();
     Flipper *CreateFlipper(b2Vec2 pivot_pos, b2Vec2 head_pos,
@@ -65,6 +70,7 @@ private:
     void CreateWormhole(const b2Vec2 src, const float radius);
 
     void RenderWall();
+    void RenderStar();
     void RenderPiston();
     void RenderFlipper();
     void RenderBall();
