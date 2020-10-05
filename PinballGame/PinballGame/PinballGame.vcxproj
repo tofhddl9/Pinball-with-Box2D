@@ -156,10 +156,12 @@
     <ClCompile Include="piston.cpp" />
     <ClCompile Include="rebounder.cpp" />
     <ClCompile Include="wall.cpp" />
+    <ClCompile Include="wormhole.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
     <ClInclude Include="bumper.h" />
+    <ClInclude Include="circle.h" />
     <ClInclude Include="contact_listener.h" />
     <ClInclude Include="Flipper.h" />
     <ClInclude Include="pinball.h" />
@@ -167,6 +169,7 @@
     <ClInclude Include="rebounder.h" />
     <ClInclude Include="setting.h" />
     <ClInclude Include="wall.h" />
+    <ClInclude Include="wormhole.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

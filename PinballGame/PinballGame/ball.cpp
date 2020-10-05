@@ -26,26 +26,6 @@ Ball::Ball(b2World* world, const b2Vec2 pos, const float radius) {
     body_->SetUserData((void*)objectType);
 }
 
-b2Vec2 Ball::GetPosition()
-{
-    return body_->GetPosition();
-}
-
-b2Vec2 Ball::GetVelocity()
-{
-    return body_->GetLinearVelocity();
-}
-
-float Ball::GetAngle()
-{
-    return body_->GetAngle();
-}
-
-float Ball::GetRadius()
-{
-    return radius_;
-}
-
 void Ball::Render()
 {
     glPushMatrix();
