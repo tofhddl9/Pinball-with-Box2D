@@ -20,7 +20,8 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
         switch (contactObjectWithBall) {
         case WINDMILL:
             break;
-        case BUMPER: {
+        case BUMPER_SMALL: {}
+        case BUMPER_LARGE: {
             b2Vec2 reflection = GetReflection(bodyB->GetLinearVelocity(), wm.normal);
             bodyB->ApplyLinearImpulse(BUMPER_ELASTICITY * reflection, bodyB->GetPosition(), true);
             break;
@@ -54,12 +55,14 @@ void ContactListener::EndContact(b2Contact* contact)
         b2WorldManifold wm;
         contact->GetWorldManifold(&wm);
         int contactObjectWithBall = ContactObjectWithBall(contactInfo);
+        if (contactObjectWithBall < WINDMILL) return;
 
+        Scoring(contactObjectWithBall);
         switch (contactObjectWithBall) {
         case WINDMILL: {
             break;
         }
-        case BUMPER: {
+        case BUMPER_SMALL or BUMPER_LARGE: {
             break;
         }
         case REBOUNDER: {
@@ -72,6 +75,11 @@ void ContactListener::EndContact(b2Contact* contact)
 
         }
     }
+}
+
+int ContactListener::GetScore()
+{
+    return score_;
 }
 
 bool ContactListener::IsContactWithBall(int contactInfo)
@@ -102,4 +110,38 @@ b2Vec2 ContactListener::GetRebound(b2Vec2 velocity, b2Vec2 normal)
 b2Vec2 ContactListener::GetReflection(b2Vec2 velocity, b2Vec2 normal)
 {
     return velocity + 2 * InnerProduct(-velocity, normal) * normal;
+}
+
+void ContactListener::Scoring(int objectType)
+{
+    switch (objectType) {
+    case WINDMILL: {
+        score_ += SCORE_WINDMILL;
+        break;
+    }
+    case BUMPER_SMALL: {
+        score_ += SCORE_BUMPER_SMALL;
+        break;
+    }
+    case BUMPER_LARGE: {
+        score_ += SCORE_BUMPER_LARGE;
+        break;
+    }
+    case REBOUNDER: {
+        score_ += SCORE_REBOUNDER;
+        break;
+    }
+    case WORMHOLE: {
+        score_ += SCORE_WORMHOLE;
+        break;
+    }
+    case STAR_SMALL: {
+        score_ += SCORE_STAR_SMALL;
+        break;
+    }
+    case STAR_LARGE: {
+        score_ += SCORE_STAR_LARGE;
+        break;
+    }
+    }
 }

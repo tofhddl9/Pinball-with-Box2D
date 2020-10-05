@@ -18,7 +18,6 @@ Ball::Ball(b2World* world, const b2Vec2 pos, const float radius) {
     fixture_def.friction = 0.36f;
     fixture_def.restitution = 0.2f;
     fixture_def.shape = &shape;
-
     body_->CreateFixture(&fixture_def);
     radius_ = radius;
 

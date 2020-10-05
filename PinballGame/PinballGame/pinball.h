@@ -1,11 +1,12 @@
 #pragma once
 #include "Box2D/Box2D.h"
+#include "GL/glut.h"
 #include "contact_listener.h"
 #include "setting.h"
 #include "ball.h"
 #include "wall.h"
 #include "piston.h"
-#include "Flipper.h"
+#include "flipper.h"
 #include "bumper.h"
 #include "rebounder.h"
 #include "wormhole.h"
@@ -29,6 +30,7 @@ public:
 
     void Step();
     void Render();
+    int GetScore();
 
     //std::vector<b2Body*> balls_;
 private:
@@ -37,7 +39,7 @@ private:
 
     std::vector<Wall *> walls_;
     std::vector<Ball *> balls_;
-
+    
     Piston *piston_;
     Flipper *leftFlipper_, *rightFlipper_;
     
@@ -54,10 +56,11 @@ private:
     void CreateWall();
     void CreatePiston();
     void CreateFlippers();
-    Flipper *CreateFlipper(b2Vec2 pivot_pos, b2Vec2 head_pos, const float head_angle, bool is_left);
+    Flipper *CreateFlipper(b2Vec2 pivot_pos, b2Vec2 head_pos,
+        const float head_angle, bool is_left);
     void CreateObstacles();
     void CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH);
-    void CreateBumper(const b2Vec2 pos, const float raius);
+    void CreateBumper(const b2Vec2 pos, const float raius, const int type);
     void CreateRebounder(const b2Vec2 p1, const b2Vec2 p2, const b2Vec2 other);
     void CreateWormhole(const b2Vec2 src, const float radius);
 
