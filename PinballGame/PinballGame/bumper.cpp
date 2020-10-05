@@ -1,6 +1,7 @@
 #include "bumper.h"
 
-Bumper::Bumper(b2World *world, const b2Vec2 pos, const float radius)
+Bumper::Bumper(b2World *world, const b2Vec2 pos,
+    const float radius, const int type)
 {
     b2BodyDef bd;
     bd.position = pos;
@@ -11,7 +12,7 @@ Bumper::Bumper(b2World *world, const b2Vec2 pos, const float radius)
     radius_ = circle.m_radius = radius;
     body_->CreateFixture(&circle, 1.0f);
 
-    int objectType = BUMPER;
+    int objectType = type;
     body_->SetUserData((void*)objectType);
 }
 
