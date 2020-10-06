@@ -19,10 +19,18 @@ void Pinball::AddBall()
     //AddBall(b2Vec2(0.0f, 23.0f), 0.4f);
 }
 
-void Pinball::AddBall(b2Vec2 pos, float radius)
+void Pinball::AddBall(const b2Vec2 pos, const float radius)
 {
     Ball* ball = new Ball(world_.get(), b2Vec2(pos.x, pos.y), radius);
     balls_.emplace_back(ball);
+}
+
+void Pinball::ProcessFlipperInput()
+{
+    for (auto leftFlipper : left_flippers_)
+        leftFlipper->IsKeyDown() ? FlipLeft() : UnflipLeft();
+    for (auto rightFlipper : right_flippers_)
+        rightFlipper->IsKeyDown() ? FlipRight() : UnflipRight();
 }
 
 void Pinball::RemoveBallToBeDeleted()
@@ -50,9 +58,8 @@ void Pinball::Step()
     world_->Step(time_step_, velocity_iterations_, position_iterations_);
 
     RemoveBallToBeDeleted();
-
-    leftFlipper_->IsKeyDown() ? FlipLeft() : UnflipLeft();
-    rightFlipper_->IsKeyDown() ? FlipRight() : UnflipRight();
+    
+    ProcessFlipperInput();
 }
 
 void Pinball::Render()
@@ -96,8 +103,12 @@ void Pinball::RenderPiston()
 
 void Pinball::RenderFlipper()
 {
-    leftFlipper_->Render();
-    rightFlipper_->Render();
+    //leftFlipper_->Render();
+    //rightFlipper_->Render();
+    for (auto flipper : left_flippers_)
+        flipper->Render();
+    for (auto flipper : right_flippers_)
+        flipper->Render();
 }
 
 void Pinball::RenderBall()
@@ -399,18 +410,26 @@ void Pinball::CreatePiston()
 
 void Pinball::CreateFlippers()
 {
-    leftFlipper_ = CreateFlipper(b2Vec2(-5.0f, -17.1f), b2Vec2(-5.0f, -17.1f), -25.0f * b2_pi / 180.0f, true); //left
-    rightFlipper_ = CreateFlipper(b2Vec2(5.0f, -17.1f), b2Vec2(5.0f, -17.1f), 25.0f * b2_pi / 180.0f, false); //right
+    left_flippers_.push_back(CreateFlipper(b2Vec2(-5.0f, -17.1f),
+        -25.0f * b2_pi / 180.0f, true, b2Vec2(2.0, 0.1))); //left_main
+    right_flippers_.push_back(CreateFlipper(b2Vec2(5.0f, -17.1f),
+        25.0f * b2_pi / 180.0f, false, b2Vec2(2.0, 0.1))); //right_main
+
+    left_flippers_.push_back(CreateFlipper(b2Vec2(-12.5f, -1.5f),
+        -25.0f * b2_pi / 180.0f, true, b2Vec2(0.8, 0.1))); //left_sub
+    right_flippers_.push_back(CreateFlipper(b2Vec2(12.5f, -1.5f),
+        25.0f * b2_pi / 180.0f, false, b2Vec2(0.8, 0.1))); //right_sub
 }
 
-Flipper* Pinball::CreateFlipper(const b2Vec2 pivot_pos, const b2Vec2 head_pos, const float head_angle, bool is_left)
+Flipper* Pinball::CreateFlipper(const b2Vec2 pivot_pos, const float head_angle,
+    const bool is_left,const b2Vec2 LWH)
 {
-    return new Flipper(world_.get(), pivot_pos, head_pos, head_angle, is_left);
+    return new Flipper(world_.get(), pivot_pos, head_angle, is_left, LWH);
 }
 
 void Pinball::CreateObstacles()
 {
-    CreateWindmill(b2Vec2(6.0f, 15.0f), b2Vec2(1.0f, 0.1f));
+    CreateWindmill(b2Vec2(6.0f, 13.0f), b2Vec2(1.2f, 0.1f));
 
     CreateBumper(b2Vec2(-2.0f, 20.0f), 0.7f, BUMPER_SMALL);
     CreateBumper(b2Vec2(0.5f, 20.5f), 0.7f, BUMPER_SMALL);
@@ -455,24 +474,32 @@ void Pinball::PushPiston(int power)
 
 void Pinball::FlipLeft()
 {
-    leftFlipper_->SetIsKeyDown(true);
-    leftFlipper_->Flip();
+    for (auto flipper : left_flippers_) {
+        flipper->SetIsKeyDown(true);
+        flipper->Flip();
+    }
 }
 
 void Pinball::UnflipLeft()
 {
-    leftFlipper_->SetIsKeyDown(false);
-    leftFlipper_->Unflip();
+    for (auto flipper : left_flippers_) {
+        flipper->SetIsKeyDown(false);
+        flipper->Unflip();
+    }
 }
 
 void Pinball::FlipRight()
 {
-    rightFlipper_->SetIsKeyDown(true);
-    rightFlipper_->Flip();
+    for (auto flipper : right_flippers_) {
+        flipper->SetIsKeyDown(true);
+        flipper->Flip();
+    }
 }
 
 void Pinball::UnflipRight()
 {
-    rightFlipper_->SetIsKeyDown(false);
-    rightFlipper_->Unflip();
+    for (auto flipper : right_flippers_) {
+        flipper->SetIsKeyDown(false);
+        flipper->Unflip();
+    }
 }

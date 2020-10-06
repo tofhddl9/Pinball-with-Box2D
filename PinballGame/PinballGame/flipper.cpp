@@ -1,13 +1,14 @@
 #include "Flipper.h"
 
-Flipper::Flipper(b2World *world, const b2Vec2 pivot_pos, const b2Vec2 head_pos, const float head_angle, bool is_left)
+Flipper::Flipper(b2World *world, const b2Vec2 pivot_pos, const float head_angle,
+	bool is_left, const b2Vec2 LWH)
 {
 	isKeyDown_ = false;
 	isLeft_ = is_left;
-	halfWH_ = b2Vec2(2.0f, 0.1f);
+	halfWH_ = LWH;
 
 	CreatePivot(world, pivot_pos);
-	CreateHead(world, head_pos, head_angle);
+	CreateHead(world, pivot_pos, head_angle, LWH);
 	CreateJoint(world, is_left);
 }
 
@@ -25,7 +26,9 @@ Flipper::Flipper(b2World* world, const b2Vec2 pos, const b2Vec2 LWH)
 void Flipper::Render()
 {
 	glPushMatrix();
-	glColor3f(0.0f, 1.0f, 0.5f);
+	glColor3f(0.1f, 1.0f, 0.5f);
+	if ((int)head_->GetUserData() == WINDMILL)
+		glColor3f(0.5f, 1.0f, 0.8f);
 	glTranslatef(head_->GetPosition().x, head_->GetPosition().y, 0.0f);
 	glRotatef(head_->GetAngle() * 180 / b2_pi, 0.0f, 0.0f, 1.0f);
 	glBegin(GL_TRIANGLE_STRIP);
@@ -62,6 +65,11 @@ void Flipper::Unflip()
 	joint_->SetMotorSpeed(speed);
 }
 
+bool Flipper::IsLeft()
+{
+	return isLeft_;
+}
+
 void Flipper::CreatePivot(b2World* world, const b2Vec2 pivot_pos)
 {
 	b2BodyDef pivot_bd;
@@ -74,7 +82,8 @@ void Flipper::CreatePivot(b2World* world, const b2Vec2 pivot_pos)
 	pivot_->CreateFixture(&circle, 0.0f);
 }
 
-void Flipper::CreateHead(b2World* world, const b2Vec2 head_pos, const float head_angle)
+void Flipper::CreateHead(b2World* world, const b2Vec2 head_pos,
+	const float head_angle, const b2Vec2 LWH)
 {
 	b2BodyDef head_bd;
 	head_bd.type = b2_dynamicBody;
@@ -83,7 +92,7 @@ void Flipper::CreateHead(b2World* world, const b2Vec2 head_pos, const float head
 	head_ = world->CreateBody(&head_bd);
 
 	b2PolygonShape box;
-	box.SetAsBox(2.0f, 0.1f);
+	box.SetAsBox(LWH.x, LWH.y);
 	head_->CreateFixture(&box, 10.0f);
 
 	int objectType = FLIPPER;
@@ -117,13 +126,13 @@ void Flipper::CreateJoint(b2World* world, const bool is_left)
 
 	if (is_left) {
 		jd.localAnchorA.Set(0, 0);
-		jd.localAnchorB.Set(-halfWH_.x, 0);
+		jd.localAnchorB.Set(-halfWH_.x - 0.1f, 0);
 		jd.lowerAngle = 1.0f * b2_pi / 180.0f;
 		jd.upperAngle = 45.0f * b2_pi / 180.0f;
 	}
 	else {
 		jd.localAnchorA.Set(0, 0);
-		jd.localAnchorB.Set(halfWH_.x, 0);
+		jd.localAnchorB.Set(halfWH_.x + 0.1f, 0);
 		jd.lowerAngle = -45.0f * b2_pi / 180.0f;
 		jd.upperAngle = -1.0f * b2_pi / 180.0f;
 	}
