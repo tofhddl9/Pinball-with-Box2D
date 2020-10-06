@@ -5,7 +5,8 @@
 class Flipper
 {
 public:
-    Flipper(b2World*, const b2Vec2 pivot_pos, const b2Vec2 head_pos, const float head_angle, bool is_left);
+    Flipper(b2World*, const b2Vec2 pivot_pos, const float head_angle,
+        const bool is_left, b2Vec2 LWH);
     Flipper(b2World*, const b2Vec2 pivot_pos, const b2Vec2 LWH);
 
     void Render();
@@ -13,10 +14,12 @@ public:
     bool IsKeyDown();
     void Flip();
     void Unflip();
+    bool IsLeft();
 
 private:
     void CreatePivot(b2World* world, const b2Vec2 pivot_pos);
-    void CreateHead(b2World* world, const b2Vec2 head_pos, const float head_angle);
+    void CreateHead(b2World* world, const b2Vec2 head_pos,
+        const float head_angle, const b2Vec2 LWH);
     void CreateHead(b2World* world, const b2Vec2 head_pos, const b2Vec2 LWH);
     void CreateJoint(b2World* world, const bool is_left);
     void CreateJoint(b2World* world);

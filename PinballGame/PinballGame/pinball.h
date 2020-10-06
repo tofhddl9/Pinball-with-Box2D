@@ -43,7 +43,8 @@ private:
     std::vector<Star*> stars_;
 
     Piston *piston_;
-    Flipper *leftFlipper_, *rightFlipper_;
+    //Flipper *leftFlipper_, *rightFlipper_;
+    std::vector<Flipper* > left_flippers_, right_flippers_;
     
     std::vector<Flipper*> windmills_;
     std::vector<Bumper*> bumpers_;
@@ -61,8 +62,8 @@ private:
 
     void CreatePiston();
     void CreateFlippers();
-    Flipper *CreateFlipper(b2Vec2 pivot_pos, b2Vec2 head_pos,
-        const float head_angle, bool is_left);
+    Flipper *CreateFlipper(b2Vec2 pivot_pos, const float head_angle,
+        const bool is_left, const b2Vec2 LWH);
     void CreateObstacles();
     void CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH);
     void CreateBumper(const b2Vec2 pos, const float raius, const int type);
@@ -76,6 +77,7 @@ private:
     void RenderBall();
     void RenderObstacles();
 
-    void AddBall(b2Vec2 pos, float radius);
+    void AddBall(const b2Vec2 pos, const float radius);
+    void ProcessFlipperInput();
     void RemoveBallToBeDeleted();
 };
