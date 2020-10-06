@@ -74,12 +74,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\workstation\IV\IV_mini_project\PinballGame\fmod_core\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\workstation\IV\IV_mini_project\PinballGame\fmod_core\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\workstation\IV\IV_mini_project\PinballGame\fmod_core\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\workstation\IV\IV_mini_project\PinballGame\fmod_core\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -107,7 +111,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\Box2D;$(SolutionDir)lib\GL</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;freeglut.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;Box2D.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -143,7 +147,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\Box2D;$(SolutionDir)lib\GL</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;freeglut.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;Box2D.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -156,6 +160,8 @@
     <ClCompile Include="pinball.cpp" />
     <ClCompile Include="piston.cpp" />
     <ClCompile Include="rebounder.cpp" />
+    <ClCompile Include="sfx.cpp" />
+    <ClCompile Include="sound_manager.cpp" />
     <ClCompile Include="star.cpp" />
     <ClCompile Include="wall.cpp" />
     <ClCompile Include="wanderer.cpp" />
@@ -172,6 +178,8 @@
     <ClInclude Include="piston.h" />
     <ClInclude Include="rebounder.h" />
     <ClInclude Include="setting.h" />
+    <ClInclude Include="sfx.h" />
+    <ClInclude Include="sound_manager.h" />
     <ClInclude Include="star.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="wanderer.h" />

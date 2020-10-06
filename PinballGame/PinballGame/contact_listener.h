@@ -4,12 +4,15 @@
 #include <vector>
 #include <set>
 #include "setting.h"
+#include "sound_manager.h"
 
 typedef std::pair<b2Fixture*, b2Fixture*> fixturePair;
 
 class ContactListener : public b2ContactListener
 {
 public:
+    ContactListener();
+    ContactListener(SoundManager *soundManager);
     void BeginContact(b2Contact* contact);
     void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
     void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
@@ -17,7 +20,8 @@ public:
     int GetScore();
 
 private:
-    int score_ = 0;
+    int score_;
+    SoundManager *soundManager_;
 
     bool IsContactWithBall(int contactInfo);
     int ContactObjectWithBall(int contactInfo);

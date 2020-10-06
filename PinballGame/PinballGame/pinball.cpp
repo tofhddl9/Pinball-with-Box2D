@@ -13,6 +13,13 @@ Pinball::Pinball()
     CreateObstacles();
 
     AddBall();
+
+    soundManager_->PlayBackgroundMusic();
+}
+
+Pinball::~Pinball()
+{
+    
 }
 
 void Pinball::AddBall()
@@ -73,6 +80,7 @@ void Pinball::Step()
     
     RemoveBallToBeDeleted();
     
+    soundManager_->Update();
 }
 
 void Pinball::Render()
@@ -160,6 +168,8 @@ void Pinball::CreateWorld()
     gravity.Set(0.0f, -9.8f);
     world_ = std::make_unique<b2World>(gravity);
 
+    soundManager_ = new SoundManager();
+    contactListener_ = ContactListener(soundManager_);
     world_->SetContactListener(&contactListener_);
 }
 

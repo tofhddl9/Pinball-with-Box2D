@@ -57,6 +57,12 @@
     <ClCompile Include="wanderer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="sound_manager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="sfx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
@@ -99,6 +105,12 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="wanderer.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="sound_manager.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="sfx.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

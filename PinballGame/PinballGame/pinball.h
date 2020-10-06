@@ -22,6 +22,7 @@ class Pinball
 {
 public:
     Pinball();
+    ~Pinball();
     void AddBall();
     void PullPiston();
     void PushPiston(int time);
@@ -38,6 +39,7 @@ public:
 private:
     b2World_ptr world_;
     ContactListener contactListener_;
+    SoundManager* soundManager_;
 
     Water* water_;
     std::vector<Wall *> walls_;

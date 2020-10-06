@@ -1,5 +1,9 @@
 #include "contact_listener.h"
 
+ContactListener::ContactListener() :score_(0), soundManager_(nullptr) {}
+
+ContactListener::ContactListener(SoundManager* soundManager) : score_(0), soundManager_(soundManager) {}
+
 void ContactListener::BeginContact(b2Contact* contact)
 {
     b2Fixture* fa = contact->GetFixtureA();
@@ -9,19 +13,18 @@ void ContactListener::BeginContact(b2Contact* contact)
     b2Body* bodyB = fb->GetBody();
 
     int contactInfo = (int)bodyA->GetUserData() + (int)bodyB->GetUserData();
-
     // make bodyB Ball
     if ((int)bodyA->GetUserData() == BALL) {
         std::swap(bodyA, bodyB);
         std::swap(fa, fb);
     }
 
-    printf("Contact Begin : %d %d\n", (int)bodyA->GetUserData(), (int)bodyB->GetUserData());
-
     if (IsContactWithBall(contactInfo)) {
+        int contactObjectWithBall = ContactObjectWithBall(contactInfo);
+        soundManager_->PlaySFX(contactObjectWithBall);
+
         b2WorldManifold wm;
         contact->GetWorldManifold(&wm);
-        int contactObjectWithBall = ContactObjectWithBall(contactInfo);
 
         switch (contactObjectWithBall) {
         case WATER: {
@@ -90,13 +93,12 @@ void ContactListener::EndContact(b2Contact* contact)
     if ((int)bodyA->GetUserData() == BALL) {
         std::swap(bodyA, bodyB);
     }
-
-    printf("Contact End : %d %d\n", (int)bodyA->GetUserData(), (int)bodyB->GetUserData());
-
+    
     if (IsContactWithBall(contactInfo)) {
         b2WorldManifold wm;
         contact->GetWorldManifold(&wm);
         int contactObjectWithBall = ContactObjectWithBall(contactInfo);
+
         if (contactObjectWithBall < WINDMILL) return;
 
         Scoring(contactObjectWithBall);

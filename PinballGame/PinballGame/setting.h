@@ -1,4 +1,5 @@
 #pragma once
+#include <Box2D/Box2D.h>
 
 enum OBJECT_TYPE {
     REMOVABLE_BALL = 0x0000,
