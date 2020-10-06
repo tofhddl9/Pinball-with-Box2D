@@ -1,7 +1,12 @@
 #pragma once
 
 #include <Box2D/Box2D.h>
+#include <vector>
+#include <set>
 #include "setting.h"
+
+typedef std::pair<b2Fixture*, b2Fixture*> fixturePair;
+
 class ContactListener : public b2ContactListener
 {
 public:
@@ -13,6 +18,7 @@ public:
 
 private:
     int score_ = 0;
+
     bool IsContactWithBall(int contactInfo);
     int ContactObjectWithBall(int contactInfo);
 
