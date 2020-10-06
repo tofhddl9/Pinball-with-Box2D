@@ -1,6 +1,36 @@
 #include "contact_listener.h"
 
-void ContactListener::BeginContact(b2Contact* contact) {}
+void ContactListener::BeginContact(b2Contact* contact)
+{
+    b2Fixture* fa = contact->GetFixtureA();
+    b2Fixture* fb = contact->GetFixtureB();
+
+    b2Body* bodyA = fa->GetBody();
+    b2Body* bodyB = fb->GetBody();
+
+    int contactInfo = (int)bodyA->GetUserData() + (int)bodyB->GetUserData();
+
+    // make bodyB Ball
+    if ((int)bodyA->GetUserData() == BALL) {
+        std::swap(bodyA, bodyB);
+        std::swap(fa, fb);
+    }
+
+    printf("Contact Begin : %d %d\n", (int)bodyA->GetUserData(), (int)bodyB->GetUserData());
+
+    if (IsContactWithBall(contactInfo)) {
+        b2WorldManifold wm;
+        contact->GetWorldManifold(&wm);
+        int contactObjectWithBall = ContactObjectWithBall(contactInfo);
+
+        switch (contactObjectWithBall) {
+        case WATER: {
+            break;
+        }
+
+        }
+    }
+}
 
 void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 {
@@ -11,6 +41,11 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
     b2Body* bodyB = fb->GetBody();
 
     int contactInfo = (int)bodyA->GetUserData() + (int)bodyB->GetUserData();
+
+    // make bodyB Ball
+    if ((int)bodyA->GetUserData() == BALL) {
+        std::swap(bodyA, bodyB);
+    }
 
     if (IsContactWithBall(contactInfo)) {
         b2WorldManifold wm;
@@ -51,6 +86,13 @@ void ContactListener::EndContact(b2Contact* contact)
 
     int contactInfo = (int)bodyA->GetUserData() + (int)bodyB->GetUserData();
 
+    // make bodyB Ball
+    if ((int)bodyA->GetUserData() == BALL) {
+        std::swap(bodyA, bodyB);
+    }
+
+    printf("Contact End : %d %d\n", (int)bodyA->GetUserData(), (int)bodyB->GetUserData());
+
     if (IsContactWithBall(contactInfo)) {
         b2WorldManifold wm;
         contact->GetWorldManifold(&wm);
@@ -70,6 +112,9 @@ void ContactListener::EndContact(b2Contact* contact)
         }
         case WORMHOLE: {
             bodyB->SetUserData((void*)REMOVABLE_BALL);
+            break;
+        }
+        case WATER: {
             break;
         }
 

@@ -5,7 +5,9 @@ Pinball::Pinball()
 {
     CreateWorld();
     CreateWall();
+    CreateWater();
     CreateStars();
+
     CreatePiston();
     CreateFlippers();
     CreateObstacles();
@@ -16,13 +18,21 @@ Pinball::Pinball()
 void Pinball::AddBall()
 {
     AddBall(b2Vec2(15.8f, -13.0f), 0.55f);
-    //AddBall(b2Vec2(0.0f, 23.0f), 0.4f);
+    //AddBall(b2Vec2(0.0f, -10.0f), 0.4f);
+    //AddBall(b2Vec2(0.1f, -10.0f), 0.55f);
 }
 
 void Pinball::AddBall(const b2Vec2 pos, const float radius)
 {
     Ball* ball = new Ball(world_.get(), b2Vec2(pos.x, pos.y), radius);
     balls_.emplace_back(ball);
+}
+
+void Pinball::MovingWanderer()
+{
+    for (auto wanderer : wanderers_) {
+        wanderer->Wander();
+    }
 }
 
 void Pinball::ProcessFlipperInput()
@@ -57,9 +67,12 @@ void Pinball::Step()
 {
     world_->Step(time_step_, velocity_iterations_, position_iterations_);
 
+    MovingWanderer();
+
+    ProcessFlipperInput();
+    
     RemoveBallToBeDeleted();
     
-    ProcessFlipperInput();
 }
 
 void Pinball::Render()
@@ -75,6 +88,8 @@ void Pinball::Render()
     gluOrtho2D(-26.0f, 25.0f, -35.0f, 30.0f);
 
     RenderWall();
+    RenderWater();
+
     RenderStar();
     RenderPiston();
     RenderFlipper();
@@ -90,6 +105,11 @@ void Pinball::RenderWall()
         wall->Render();
 }
 
+void Pinball::RenderWater()
+{
+    water_->Render();
+}
+
 void Pinball::RenderStar()
 {
     for (auto star : stars_)
@@ -103,8 +123,6 @@ void Pinball::RenderPiston()
 
 void Pinball::RenderFlipper()
 {
-    //leftFlipper_->Render();
-    //rightFlipper_->Render();
     for (auto flipper : left_flippers_)
         flipper->Render();
     for (auto flipper : right_flippers_)
@@ -122,6 +140,10 @@ void Pinball::RenderObstacles()
     for (auto windmill : windmills_)
         windmill->Render();
 
+    for (auto wanderer : wanderers_) {
+        wanderer->Render();
+    }
+
     for (auto bumper : bumpers_)
         bumper->Render();
 
@@ -130,7 +152,6 @@ void Pinball::RenderObstacles()
 
     for (auto wormhole : wormholes_)
         wormhole->Render();
-
 }
 
 void Pinball::CreateWorld()
@@ -151,8 +172,8 @@ void Pinball::CreateWall()
     wall_point = new b2Vec2[63];
     {
         wall_point[0].Set(16.5f, -23.5f); //F1
-        wall_point[1].Set(16.5f, -26.5f); //E1
-        wall_point[2].Set(-15.5f, -26.0f);//D1
+        wall_point[1].Set(16.5f, -28.0f); //E1
+        wall_point[2].Set(-15.5f, -28.0f);//D1
         wall_point[3].Set(-15.5f, -23.5f);//C1
         wall_point[4].Set(-2.0f, -23.5f);//B1
         wall_point[5].Set(-2.0f, -20.3f);//G3
@@ -228,7 +249,7 @@ void Pinball::CreateWall()
     //wall_2
     wall_point = new b2Vec2[13];
     {
-        wall_point[0].Set(15.0f, -23.6f);//S3
+        wall_point[0].Set(15.0f, -23.5f);//S3
         wall_point[1].Set(2.0f, -23.5f);//G1
         wall_point[2].Set(2.0f, -20.3f);//D3
         wall_point[3].Set(15.0f, -14.0f);//C3
@@ -377,6 +398,11 @@ void Pinball::CreateWall()
 
 }
 
+void Pinball::CreateWater()
+{
+    water_ = new Water(world_.get(), b2Vec2(0.47f, -26.5f), b2Vec2(15.9f, 1.5f));
+}
+
 void Pinball::CreateStars()
 {
     CreateStar(b2Vec2(-12.0f, 20.35f), 0.35f, STAR_LARGE);
@@ -431,6 +457,9 @@ void Pinball::CreateObstacles()
 {
     CreateWindmill(b2Vec2(6.0f, 13.0f), b2Vec2(1.2f, 0.1f));
 
+    CreateWanderer(b2Vec2(3.0f, -3.0f), b2Vec2(3.0f, 0.0f), b2Vec2(1.0f, 0.2f), b2Vec2(-10.0f, 5.0f));
+    CreateWanderer(b2Vec2(-10.0f, 7.0f), b2Vec2(-4.0f, 0.0f), b2Vec2(0.6f, 0.1f), b2Vec2(-11.0f, -1.0f));
+    
     CreateBumper(b2Vec2(-2.0f, 20.0f), 0.7f, BUMPER_SMALL);
     CreateBumper(b2Vec2(0.5f, 20.5f), 0.7f, BUMPER_SMALL);
     CreateBumper(b2Vec2(-1.0f, 18.0f), 0.7f, BUMPER_SMALL);
@@ -445,6 +474,12 @@ void Pinball::CreateObstacles()
 void Pinball::CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH)
 {
     windmills_.push_back(new Flipper(world_.get(), pos, LWH));
+}
+
+void Pinball::CreateWanderer(const b2Vec2 head_pos, const b2Vec2 velocity,
+    const b2Vec2 LWH, const b2Vec2 LR)
+{
+    wanderers_.push_back(new Wanderer(world_.get(), head_pos, velocity, LWH, LR));
 }
 
 void Pinball::CreateBumper(const b2Vec2 pos, const float radius, const int type)
