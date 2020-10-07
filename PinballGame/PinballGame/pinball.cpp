@@ -55,7 +55,7 @@ void Pinball::RemoveBallToBeDeleted()
     auto it_start = balls_.begin();
     auto it_end = balls_.end();
     for (auto it = it_start; it != it_end; ++it) {
-        b2Body* body = (*it)->GetBody();
+        body_ptr body = (*it)->GetBody();
         float32 radius = body->GetFixtureList()->GetShape()->m_radius;
         if ((int)body->GetUserData() == REMOVABLE_BALL) {
             balls_.erase(it);
@@ -67,7 +67,7 @@ void Pinball::RemoveBallToBeDeleted()
 
 int Pinball::GetScore()
 {
-    return contactListener_.GetScore();
+    return contactListener_->GetScore();
 }
 
 void Pinball::Step()
@@ -169,8 +169,8 @@ void Pinball::CreateWorld()
     world_ = std::make_unique<b2World>(gravity);
 
     soundManager_ = new SoundManager();
-    contactListener_ = ContactListener(soundManager_);
-    world_->SetContactListener(&contactListener_);
+    contactListener_ = new ContactListener(soundManager_);
+    world_->SetContactListener(contactListener_);
 }
 
 void Pinball::CreateWall()

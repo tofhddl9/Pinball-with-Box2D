@@ -15,10 +15,11 @@ SoundManager::SoundManager()
 SoundManager::~SoundManager()
 {
     delete backgroundMusic_;
+    delete pistonSound_;
     delete wallSound_;
     delete bumperSound_;
     delete coinSound_;
-
+    delete waterSound_;
     SFX::Release();
 }
 

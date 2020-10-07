@@ -1,6 +1,9 @@
 #pragma once
 #include <Box2D/Box2D.h>
 
+//You just have to care about the release of b2World*
+using body_ptr = b2Body*;
+
 enum OBJECT_TYPE {
     REMOVABLE_BALL = 0x0000,
     BALL = 0x0001,

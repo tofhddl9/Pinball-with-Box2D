@@ -38,7 +38,7 @@ public:
 
 private:
     b2World_ptr world_;
-    ContactListener contactListener_;
+    ContactListener *contactListener_;
     SoundManager* soundManager_;
 
     Water* water_;

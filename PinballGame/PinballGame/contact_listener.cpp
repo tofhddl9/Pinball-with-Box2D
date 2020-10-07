@@ -1,16 +1,19 @@
 #include "contact_listener.h"
 
-ContactListener::ContactListener() :score_(0), soundManager_(nullptr) {}
-
 ContactListener::ContactListener(SoundManager* soundManager) : score_(0), soundManager_(soundManager) {}
+
+ContactListener::~ContactListener()
+{
+    delete soundManager_;
+}
 
 void ContactListener::BeginContact(b2Contact* contact)
 {
     b2Fixture* fa = contact->GetFixtureA();
     b2Fixture* fb = contact->GetFixtureB();
 
-    b2Body* bodyA = fa->GetBody();
-    b2Body* bodyB = fb->GetBody();
+    body_ptr bodyA = fa->GetBody();
+    body_ptr bodyB = fb->GetBody();
 
     int contactInfo = (int)bodyA->GetUserData() + (int)bodyB->GetUserData();
     // make bodyB Ball
@@ -40,8 +43,8 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
     b2Fixture* fa = contact->GetFixtureA();
     b2Fixture* fb = contact->GetFixtureB();
 
-    b2Body* bodyA = fa->GetBody();
-    b2Body* bodyB = fb->GetBody();
+    body_ptr bodyA = fa->GetBody();
+    body_ptr bodyB = fb->GetBody();
 
     int contactInfo = (int)bodyA->GetUserData() + (int)bodyB->GetUserData();
 
@@ -84,8 +87,8 @@ void ContactListener::EndContact(b2Contact* contact)
     b2Fixture* fa = contact->GetFixtureA();
     b2Fixture* fb = contact->GetFixtureB();
 
-    b2Body* bodyA = fa->GetBody();
-    b2Body* bodyB = fb->GetBody();
+    body_ptr bodyA = fa->GetBody();
+    body_ptr bodyB = fb->GetBody();
 
     int contactInfo = (int)bodyA->GetUserData() + (int)bodyB->GetUserData();
 

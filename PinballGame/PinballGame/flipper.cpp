@@ -23,6 +23,11 @@ Flipper::Flipper(b2World* world, const b2Vec2 pos, const b2Vec2 LWH)
 	CreateJoint(world);
 }
 
+Flipper::~Flipper()
+{
+	delete joint_;
+}
+
 void Flipper::Render()
 {
 	glPushMatrix();

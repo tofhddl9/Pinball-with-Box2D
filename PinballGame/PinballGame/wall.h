@@ -18,7 +18,7 @@ public:
 
 private:
     WALL_TYPE type_;
-    b2Body* body_;
+    body_ptr body_;
     b2Vec2* wall_points_;
     int num_points_;
 };

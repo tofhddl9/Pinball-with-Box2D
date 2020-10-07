@@ -36,7 +36,7 @@ void Ball::Render()
     RenderCircle();
 }
 
-b2Body* Ball::GetBody()
+body_ptr Ball::GetBody()
 {
     return body_;
 }

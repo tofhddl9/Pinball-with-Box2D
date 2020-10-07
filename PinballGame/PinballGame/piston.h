@@ -13,11 +13,11 @@ public:
     void Render();
 
 private:
-    void CreateJoint(b2World* world, b2Body* pivot, b2Body* head);
+    void CreateJoint(b2World* world, body_ptr pivot, body_ptr head);
 
     const float FORCE_PER_PRESSED_TIME = 250.0;
     float head_radius_;
-    b2Body* head_;
-    b2Body* pivot_;
+    body_ptr head_;
+    body_ptr pivot_;
     b2PrismaticJoint* joint_;
 };

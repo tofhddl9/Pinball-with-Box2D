@@ -9,6 +9,6 @@ public:
     void RenderCircle();
 
 protected:
-    b2Body* body_;
+    body_ptr body_;
     float radius_;
 };

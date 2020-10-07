@@ -10,5 +10,5 @@ public:
     ~Ball();
     virtual void Render();
 
-    b2Body *GetBody();
+    body_ptr GetBody();
 };

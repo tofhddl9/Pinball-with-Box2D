@@ -16,6 +16,7 @@ SFX::SFX(const char* path, bool loop) {
 SFX::~SFX()
 {
     FMOD_Sound_Release(sound_);
+    delete channel_;
 }
 
 
