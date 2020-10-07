@@ -424,9 +424,9 @@ void Pinball::CreateStars()
     CreateStar(b2Vec2(-11.15f, 25.0f), 0.35f, STAR_LARGE);
     CreateStar(b2Vec2(-9.5f, 25.5f), 0.35f, STAR_LARGE);
 
-    CreateStar(b2Vec2(9.5f, 20.7f), 0.35f, STAR_SMALL);
-    CreateStar(b2Vec2(8.0f, 21.7f), 0.35f, STAR_SMALL);
-    CreateStar(b2Vec2(6.5f, 22.3f), 0.35f, STAR_SMALL);
+    CreateStar(b2Vec2(9.5f, 20.7f), 0.5f, STAR_SMALL);
+    CreateStar(b2Vec2(8.0f, 21.7f), 0.5f, STAR_SMALL);
+    CreateStar(b2Vec2(6.5f, 22.3f), 0.5f, STAR_SMALL);
 
     CreateStar(b2Vec2(-0.5f, 10.5f), 0.35f, STAR_SMALL);
     CreateStar(b2Vec2(-0.7f, 8.5f), 0.35f, STAR_SMALL);
@@ -478,7 +478,7 @@ void Pinball::CreateObstacles()
     CreateRebounder(b2Vec2(-10.0f, -8.0f), b2Vec2(-8.0f, -13.7f), b2Vec2(-11.0f, -12.0f));
     CreateRebounder(b2Vec2(10.0f, -8.0f), b2Vec2(8.0f, -13.7f), b2Vec2(11.0f, -12.0f));
 
-    CreateWormhole(b2Vec2(3.0f, 23.0f), 0.4f);
+    CreateWormhole(b2Vec2(3.0f, 23.0f), 0.5f);
 }
 
 void Pinball::CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH)
