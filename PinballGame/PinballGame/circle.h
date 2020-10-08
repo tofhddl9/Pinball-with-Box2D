@@ -5,6 +5,7 @@
 
 class Circle {
 public:
+    virtual ~Circle() {}
     virtual void Render() = 0;
     void RenderCircle();
 

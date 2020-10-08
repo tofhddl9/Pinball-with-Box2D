@@ -7,7 +7,7 @@ class Ball : Circle{
 
 public:
     Ball(b2World *world, const b2Vec2 pos, const float radius);
-    ~Ball();
+    virtual ~Ball();
     virtual void Render();
 
     body_ptr GetBody();
