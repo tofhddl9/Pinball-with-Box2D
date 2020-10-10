@@ -23,11 +23,12 @@ Pinball::~Pinball()
 
 void Pinball::AddBall()
 {
-    AddBall(b2Vec2(15.8f, -13.0f), 0.55f);
+    AddBall(b2Vec2(15.8f, -13.0f), 0.55f, BALL);
 }
-void Pinball::AddBall(const b2Vec2 pos, const float radius)
+
+void Pinball::AddBall(const b2Vec2 pos, const float radius, const int ballType)
 {
-    Ball* ball = new Ball(world_.get(), b2Vec2(pos.x, pos.y), radius);
+    Ball* ball = new Ball(world_.get(), b2Vec2(pos.x, pos.y), radius, ballType);
     balls_.emplace_back(ball);
 }
 
@@ -50,13 +51,23 @@ void Pinball::RemoveBallToBeDeleted()
 {
     auto it_start = balls_.begin();
     auto it_end = balls_.end();
+
     for (auto it = it_start; it != it_end; ++it) {
-        body_ptr body = (*it)->GetBody();
-        float32 radius = body->GetFixtureList()->GetShape()->m_radius;
-        if ((int)body->GetUserData() == REMOVABLE_BALL) {
-            balls_.erase(it);
+        body_ptr ball = (*it)->GetBody();
+        float32 radius = ball->GetFixtureList()->GetShape()->m_radius;
+
+        if (((int)ball->GetUserData() & TRAVELING)) {
             delete (*it);
-            AddBall(WORMHOLE_DESTINATION , std::max(0.4f, radius * 0.8f));
+            balls_.erase(it);
+            AddBall(WORMHOLE_DESTINATION , std::max(0.4f, radius * 0.8f), BALL);
+        }
+        else if ((int)ball->GetUserData() & DIVING) {
+            b2Vec2 pos = ball->GetPosition();
+            float r = ball->GetFixtureList()->GetShape()->m_radius;
+
+            delete (*it);
+            balls_.erase(it);
+            AddBall(pos, r, BALL|FLOATING);
         }
     }
 }
@@ -64,19 +75,24 @@ void Pinball::RemoveBallToBeDeleted()
 int Pinball::GetScore()
 {
     return contactListener_->GetScore();
+
 }
 
 void Pinball::Step()
 {
+
     world_->Step(time_step_, velocity_iterations_, position_iterations_);
 
-    MovingWanderer();
+    soundManager_->Update();
 
     ProcessFlipperInput();
     
+    MovingWanderer();
+
+    contactListener_->FloatBall();
+
     RemoveBallToBeDeleted();
-    
-    soundManager_->Update();
+
 }
 
 void Pinball::Render()
