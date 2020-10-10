@@ -83,8 +83,6 @@ void Pinball::Step()
 
     world_->Step(time_step_, velocity_iterations_, position_iterations_);
 
-    soundManager_->Update();
-
     ProcessFlipperInput();
     
     MovingWanderer();

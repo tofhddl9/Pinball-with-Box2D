@@ -5,53 +5,39 @@ SoundManager::SoundManager()
     SFX::Init();
 
     backgroundMusic_ = new SFX(SOUND_FILE_BACKGROUND, true);
-    pistonSound_ = new SFX(SOUND_FILE_SHOOTING, false);
-    wallSound_ = new SFX(SOUND_FILE_WALL, false);
-    bumperSound_ = new SFX(SOUND_FILE_BUMPER, false);
-    coinSound_ = new SFX(SOUND_FILE_COIN, false);
-    waterSound_ = new SFX(SOUND_FILE_POURING, false);
+
+    effectSounds_[PISTON] = new SFX(SOUND_FILE_SHOOTING, false);
+
+    effectSounds_[FLIPPER] = new SFX(SOUND_FILE_WALL, false);
+    effectSounds_[WINDMILL] = new SFX(SOUND_FILE_WALL, false);
+    effectSounds_[WANDERER] = new SFX(SOUND_FILE_WALL, false);
+
+    effectSounds_[REBOUNDER] = new SFX(SOUND_FILE_BUMPER, false);
+    effectSounds_[BUMPER_SMALL] = new SFX(SOUND_FILE_BUMPER, false);
+    effectSounds_[BUMPER_LARGE] = new SFX(SOUND_FILE_BUMPER, false);
+
+    effectSounds_[STAR_SMALL] = new SFX(SOUND_FILE_COIN, false);
+    effectSounds_[STAR_LARGE] = new SFX(SOUND_FILE_COIN, false);
+
+    effectSounds_[WATER] = new SFX(SOUND_FILE_POURING, false);
+
+    effectSounds_[WORMHOLE] = new SFX(SOUND_FILE_WORMHOLE, false);
 }
 
 SoundManager::~SoundManager()
 {
     delete backgroundMusic_;
-    delete pistonSound_;
-    delete wallSound_;
-    delete bumperSound_;
-    delete coinSound_;
-    delete waterSound_;
+   
+    for (auto it = effectSounds_.begin(); it != effectSounds_.end(); ++it) {
+        delete(it->second);
+    }
     SFX::Release();
 }
 
-void SoundManager::PlaySFX(int objectType)
+void SoundManager::PlaySFX(const int objectType)
 {
-    switch (objectType) {
-    case PISTON: {
-        pistonSound_->Play();
-        break;
-    }
-    case FLIPPER: {}
-    case WINDMILL: {}
-    case WANDERER: {
-        wallSound_->Play();
-        break;
-    }
-    case REBOUNDER: {}
-    case BUMPER_SMALL: {}
-    case BUMPER_LARGE: {
-        bumperSound_->Play();
-        break;
-    }
-    case STAR_SMALL: {}
-    case STAR_LARGE: {
-        coinSound_->Play();
-        break;
-    }
-    case WATER: {
-        waterSound_->Play();
-        break;
-    }
-    }
+    if (effectSounds_[objectType] != nullptr)
+        effectSounds_[objectType]->Play();
 }
 
 void SoundManager::PlayBackgroundMusic()
@@ -59,7 +45,3 @@ void SoundManager::PlayBackgroundMusic()
     backgroundMusic_->Play();
 }
 
-void SoundManager::Update()
-{
-    backgroundMusic_->Update();
-}
