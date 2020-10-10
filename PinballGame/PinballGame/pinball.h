@@ -85,7 +85,7 @@ private:
     void RenderBall();
     void RenderObstacles();
 
-    void AddBall(const b2Vec2 pos, const float radius);
+    void AddBall(const b2Vec2 pos, const float radius, const int ballType);
     void MovingWanderer();
     void ProcessFlipperInput();
     void RemoveBallToBeDeleted();

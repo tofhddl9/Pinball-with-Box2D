@@ -5,7 +5,6 @@
 using body_ptr = b2Body*;
 
 enum OBJECT_TYPE {
-    REMOVABLE_BALL = 0x0000,
     BALL = 0x0001,
     WALL = 0x0002,
     PISTON = 0x0004,
@@ -20,7 +19,12 @@ enum OBJECT_TYPE {
     WORMHOLE = 0x0400,
     STAR_SMALL = 0x0800,
     STAR_LARGE = 0x1000,
+};
 
+enum BALL_PROPERTY {
+    TRAVELING = 0x10000, // ball into wormhole
+    DIVING = 0x20000,    // ball into water 
+    FLOATING = 0x40000   // floating ball
 };
 
 const float BUMPER_ELASTICITY = 1.0f;
