@@ -15,7 +15,7 @@ Water::Water(b2World* world, b2Vec2 center, b2Vec2 LWH)
     b2FixtureDef fd;
     fd.shape = &box;
     fd.isSensor = true;
-    fd.density = 1.0f;
+    fd.density = 1.15f;
     body_->CreateFixture(&fd);
 
     int objectType = WATER;
