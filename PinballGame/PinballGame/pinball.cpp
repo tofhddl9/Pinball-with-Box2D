@@ -13,18 +13,22 @@ Pinball::Pinball()
     CreateObstacles();
 
     AddBall();
+
+    soundManager_->PlayBackgroundMusic();
+}
+Pinball::~Pinball()
+{
+    
 }
 
 void Pinball::AddBall()
 {
-    AddBall(b2Vec2(15.8f, -13.0f), 0.55f);
-    //AddBall(b2Vec2(0.0f, -10.0f), 0.4f);
-    //AddBall(b2Vec2(0.1f, -10.0f), 0.55f);
+    AddBall(b2Vec2(15.8f, -13.0f), 0.55f, BALL);
 }
 
-void Pinball::AddBall(const b2Vec2 pos, const float radius)
+void Pinball::AddBall(const b2Vec2 pos, const float radius, const int ballType)
 {
-    Ball* ball = new Ball(world_.get(), b2Vec2(pos.x, pos.y), radius);
+    Ball* ball = new Ball(world_.get(), b2Vec2(pos.x, pos.y), radius, ballType);
     balls_.emplace_back(ball);
 }
 
@@ -47,32 +51,46 @@ void Pinball::RemoveBallToBeDeleted()
 {
     auto it_start = balls_.begin();
     auto it_end = balls_.end();
+
     for (auto it = it_start; it != it_end; ++it) {
-        b2Body* body = (*it)->GetBody();
-        float32 radius = body->GetFixtureList()->GetShape()->m_radius;
-        if ((int)body->GetUserData() == REMOVABLE_BALL) {
-            balls_.erase(it);
+        body_ptr ball = (*it)->GetBody();
+        float32 radius = ball->GetFixtureList()->GetShape()->m_radius;
+
+        if (((int)ball->GetUserData() & TRAVELING)) {
             delete (*it);
-            AddBall(WORMHOLE_DESTINATION , std::max(0.4f, radius * 0.8f));
+            balls_.erase(it);
+            AddBall(WORMHOLE_DESTINATION , std::max(0.4f, radius * 0.8f), BALL);
+        }
+        else if ((int)ball->GetUserData() & DIVING) {
+            b2Vec2 pos = ball->GetPosition();
+            float r = ball->GetFixtureList()->GetShape()->m_radius;
+
+            delete (*it);
+            balls_.erase(it);
+            AddBall(pos, r, BALL|FLOATING);
         }
     }
 }
 
 int Pinball::GetScore()
 {
-    return contactListener_.GetScore();
+    return contactListener_->GetScore();
+
 }
 
 void Pinball::Step()
 {
-    world_->Step(time_step_, velocity_iterations_, position_iterations_);
 
-    MovingWanderer();
+    world_->Step(time_step_, velocity_iterations_, position_iterations_);
 
     ProcessFlipperInput();
     
+    MovingWanderer();
+
+    contactListener_->FloatBall();
+
     RemoveBallToBeDeleted();
-    
+
 }
 
 void Pinball::Render()
@@ -98,29 +116,24 @@ void Pinball::Render()
 
     glutSwapBuffers();
 }
-
 void Pinball::RenderWall()
 {
     for (auto wall : walls_)
         wall->Render();
 }
-
 void Pinball::RenderWater()
 {
     water_->Render();
 }
-
 void Pinball::RenderStar()
 {
     for (auto star : stars_)
         star->Render();
 }
-
 void Pinball::RenderPiston()
 {
     piston_->Render();
 }
-
 void Pinball::RenderFlipper()
 {
     for (auto flipper : left_flippers_)
@@ -128,13 +141,11 @@ void Pinball::RenderFlipper()
     for (auto flipper : right_flippers_)
         flipper->Render();
 }
-
 void Pinball::RenderBall()
 {
     for (auto ball : balls_)
         ball->Render();
 }
-
 void Pinball::RenderObstacles()
 {
     for (auto windmill : windmills_)
@@ -160,9 +171,10 @@ void Pinball::CreateWorld()
     gravity.Set(0.0f, -9.8f);
     world_ = std::make_unique<b2World>(gravity);
 
-    world_->SetContactListener(&contactListener_);
+    soundManager_ = new SoundManager();
+    contactListener_ = new ContactListener(soundManager_);
+    world_->SetContactListener(contactListener_);
 }
-
 void Pinball::CreateWall()
 {
     Wall* wall;
@@ -397,12 +409,10 @@ void Pinball::CreateWall()
     walls_.push_back(wall);
 
 }
-
 void Pinball::CreateWater()
 {
     water_ = new Water(world_.get(), b2Vec2(0.47f, -26.5f), b2Vec2(15.9f, 1.5f));
 }
-
 void Pinball::CreateStars()
 {
     CreateStar(b2Vec2(-12.0f, 20.35f), 0.35f, STAR_LARGE);
@@ -414,15 +424,14 @@ void Pinball::CreateStars()
     CreateStar(b2Vec2(-11.15f, 25.0f), 0.35f, STAR_LARGE);
     CreateStar(b2Vec2(-9.5f, 25.5f), 0.35f, STAR_LARGE);
 
-    CreateStar(b2Vec2(9.5f, 20.7f), 0.35f, STAR_SMALL);
-    CreateStar(b2Vec2(8.0f, 21.7f), 0.35f, STAR_SMALL);
-    CreateStar(b2Vec2(6.5f, 22.3f), 0.35f, STAR_SMALL);
+    CreateStar(b2Vec2(9.5f, 20.7f), 0.5f, STAR_SMALL);
+    CreateStar(b2Vec2(8.0f, 21.7f), 0.5f, STAR_SMALL);
+    CreateStar(b2Vec2(6.5f, 22.3f), 0.5f, STAR_SMALL);
 
-    CreateStar(b2Vec2(-0.5f, 10.5f), 0.35f, STAR_SMALL);
-    CreateStar(b2Vec2(-0.7f, 8.5f), 0.35f, STAR_SMALL);
-    CreateStar(b2Vec2(-0.9f, 6.5f), 0.35f, STAR_SMALL);
+    CreateStar(b2Vec2(-0.5f, 10.5f), 0.7f, STAR_SMALL);
+    CreateStar(b2Vec2(-0.7f, 8.5f), 0.7f, STAR_SMALL);
+    CreateStar(b2Vec2(-0.9f, 6.5f), 0.7f, STAR_SMALL);
 }
-
 void Pinball::CreateStar(b2Vec2 pos, const float centerToVertex, const int type)
 {
     stars_.push_back(new Star(world_.get(), pos, centerToVertex, type));
@@ -433,7 +442,6 @@ void Pinball::CreatePiston()
     piston_ = new Piston(world_.get(), b2Vec2(15.0f, -23.0f),
         b2Vec2(15.75f, -20.0f), 0.6f);
 }
-
 void Pinball::CreateFlippers()
 {
     left_flippers_.push_back(CreateFlipper(b2Vec2(-5.0f, -17.1f),
@@ -446,7 +454,6 @@ void Pinball::CreateFlippers()
     right_flippers_.push_back(CreateFlipper(b2Vec2(12.5f, -1.5f),
         25.0f * b2_pi / 180.0f, false, b2Vec2(0.8, 0.1))); //right_sub
 }
-
 Flipper* Pinball::CreateFlipper(const b2Vec2 pivot_pos, const float head_angle,
     const bool is_left,const b2Vec2 LWH)
 {
@@ -468,30 +475,25 @@ void Pinball::CreateObstacles()
     CreateRebounder(b2Vec2(-10.0f, -8.0f), b2Vec2(-8.0f, -13.7f), b2Vec2(-11.0f, -12.0f));
     CreateRebounder(b2Vec2(10.0f, -8.0f), b2Vec2(8.0f, -13.7f), b2Vec2(11.0f, -12.0f));
 
-    CreateWormhole(b2Vec2(3.0f, 23.0f), 0.4f);
+    CreateWormhole(b2Vec2(3.0f, 23.0f), 0.5f);
 }
-
 void Pinball::CreateWindmill(const b2Vec2 pos, const b2Vec2 LWH)
 {
     windmills_.push_back(new Flipper(world_.get(), pos, LWH));
 }
-
 void Pinball::CreateWanderer(const b2Vec2 head_pos, const b2Vec2 velocity,
     const b2Vec2 LWH, const b2Vec2 LR)
 {
     wanderers_.push_back(new Wanderer(world_.get(), head_pos, velocity, LWH, LR));
 }
-
 void Pinball::CreateBumper(const b2Vec2 pos, const float radius, const int type)
 {
     bumpers_.push_back(new Bumper(world_.get(), pos, radius, type));
 }
-
 void Pinball::CreateRebounder(const b2Vec2 p1, const b2Vec2 p2, const b2Vec2 other)
 {
     rebounders_.push_back(new Rebounder(world_.get(), p1, p2, other));
 }
-
 void Pinball::CreateWormhole(const b2Vec2 src, const float radius)
 {
     wormholes_.push_back(new Wormhole(world_.get(), src, radius));
@@ -501,7 +503,6 @@ void Pinball::PullPiston()
 {
     piston_->Pull();
 }
-
 void Pinball::PushPiston(int power)
 {
     piston_->Push(power);
@@ -514,7 +515,6 @@ void Pinball::FlipLeft()
         flipper->Flip();
     }
 }
-
 void Pinball::UnflipLeft()
 {
     for (auto flipper : left_flippers_) {
@@ -522,7 +522,6 @@ void Pinball::UnflipLeft()
         flipper->Unflip();
     }
 }
-
 void Pinball::FlipRight()
 {
     for (auto flipper : right_flippers_) {
@@ -530,7 +529,6 @@ void Pinball::FlipRight()
         flipper->Flip();
     }
 }
-
 void Pinball::UnflipRight()
 {
     for (auto flipper : right_flippers_) {

@@ -11,7 +11,7 @@ public:
     void Render();
 
 private:
-    b2Body* body_;
+    body_ptr body_;
     b2Vec2* rebounder_points_;
     b2Vec2 p1_, p2_, other_;
 };

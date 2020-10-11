@@ -8,6 +8,7 @@ public:
     Flipper(b2World*, const b2Vec2 pivot_pos, const float head_angle,
         const bool is_left, b2Vec2 LWH);
     Flipper(b2World*, const b2Vec2 pivot_pos, const b2Vec2 LWH);
+    ~Flipper();
 
     void Render();
     void SetIsKeyDown(bool isKeyDown);
@@ -25,8 +26,8 @@ private:
     void CreateJoint(b2World* world);
 
     b2RevoluteJoint* joint_;
-    b2Body* pivot_;
-    b2Body* head_;
+    body_ptr pivot_;
+    body_ptr head_;
     b2Vec2 halfWH_;
     bool isKeyDown_;
     bool isLeft_;

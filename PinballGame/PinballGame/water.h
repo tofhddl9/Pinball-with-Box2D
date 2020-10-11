@@ -10,6 +10,6 @@ public:
     void Render();
 
 private:
-    b2Body *body_;
+    body_ptr body_;
     b2Vec2 LWH_;
 };

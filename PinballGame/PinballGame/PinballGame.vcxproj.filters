@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Obstacles">
+      <UniqueIdentifier>{41703702-bcce-4ace-8aff-8588ed897a76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,16 +36,7 @@
     <ClCompile Include="flipper.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="bumper.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="contact_listener.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="rebounder.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="wormhole.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="circle.cpp">
@@ -54,8 +48,23 @@
     <ClCompile Include="water.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="wanderer.cpp">
+    <ClCompile Include="sound_manager.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="sfx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="bumper.cpp">
+      <Filter>소스 파일\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="rebounder.cpp">
+      <Filter>소스 파일\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="wanderer.cpp">
+      <Filter>소스 파일\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="wormhole.cpp">
+      <Filter>소스 파일\Obstacles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,22 +83,13 @@
     <ClInclude Include="Flipper.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="bumper.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="contact_listener.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="setting.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="rebounder.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="circle.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="wormhole.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="star.h">
@@ -98,8 +98,23 @@
     <ClInclude Include="water.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="wanderer.h">
+    <ClInclude Include="sound_manager.h">
       <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="sfx.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="bumper.h">
+      <Filter>소스 파일\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="rebounder.h">
+      <Filter>소스 파일\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="wanderer.h">
+      <Filter>소스 파일\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="wormhole.h">
+      <Filter>소스 파일\Obstacles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

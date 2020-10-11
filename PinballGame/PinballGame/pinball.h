@@ -22,6 +22,7 @@ class Pinball
 {
 public:
     Pinball();
+    ~Pinball();
     void AddBall();
     void PullPiston();
     void PushPiston(int time);
@@ -37,7 +38,8 @@ public:
 
 private:
     b2World_ptr world_;
-    ContactListener contactListener_;
+    ContactListener *contactListener_;
+    SoundManager* soundManager_;
 
     Water* water_;
     std::vector<Wall *> walls_;
@@ -83,7 +85,7 @@ private:
     void RenderBall();
     void RenderObstacles();
 
-    void AddBall(const b2Vec2 pos, const float radius);
+    void AddBall(const b2Vec2 pos, const float radius, const int ballType);
     void MovingWanderer();
     void ProcessFlipperInput();
     void RemoveBallToBeDeleted();

@@ -14,7 +14,7 @@ public:
 private:
     bool IsInsideOfMap();
 
-    b2Body* head_;
-    b2Body* pivot_;
+    body_ptr head_;
+    body_ptr pivot_;
     b2Vec2 LWH_, LR_;
 };

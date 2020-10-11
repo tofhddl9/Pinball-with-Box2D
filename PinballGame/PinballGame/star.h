@@ -12,6 +12,6 @@ public:
     void Render();
 
 private:
-    b2Body* body_;
+    body_ptr body_;
     float size_;
 };

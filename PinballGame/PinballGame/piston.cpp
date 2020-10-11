@@ -24,7 +24,7 @@ Piston::Piston(b2World *world, const b2Vec2 pivot_pos,
     CreateJoint(world, pivot_, head_);
 }
 
-void Piston::CreateJoint(b2World* world, b2Body* pivot, b2Body* head)
+void Piston::CreateJoint(b2World* world, body_ptr pivot, body_ptr head)
 {
     b2PrismaticJointDef prismaticJoint;
     prismaticJoint.bodyA = pivot_;
@@ -50,7 +50,7 @@ void Piston::Pull()
 
 void Piston::Push(int time)
 {
-    printf("Piston Power :%f\n", joint_->GetMaxMotorForce());
+    printf("Power :%f\n", joint_->GetMaxMotorForce());
     joint_->SetMaxMotorForce(FORCE_PER_PRESSED_TIME * time);
     joint_->EnableLimit(false);
     joint_->EnableMotor(true);

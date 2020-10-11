@@ -5,10 +5,11 @@
 
 class Circle {
 public:
+    virtual ~Circle() {}
     virtual void Render() = 0;
     void RenderCircle();
 
 protected:
-    b2Body* body_;
+    body_ptr body_;
     float radius_;
 };
