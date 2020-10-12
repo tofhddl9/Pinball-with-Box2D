@@ -6,7 +6,7 @@
 class Wanderer
 {
 public:
-    Wanderer(b2World* world, const b2Vec2 pivot_pos,
+    Wanderer(b2World* world, const b2Vec2 velocity,
         const b2Vec2 head_pos, const b2Vec2 LWH, const b2Vec2 LR);
     void Render();
     void Wander();
@@ -15,6 +15,5 @@ private:
     bool IsInsideOfMap();
 
     body_ptr head_;
-    body_ptr pivot_;
     b2Vec2 LWH_, LR_;
 };

@@ -1,6 +1,10 @@
 #include "contact_listener.h"
 
-ContactListener::ContactListener(SoundManager* soundManager) : score_(0), soundManager_(soundManager) {}
+ContactListener::ContactListener(SoundManager* soundManager) :
+    score_(0), soundManager_(soundManager)
+{
+    RegisterScore();
+}
 
 ContactListener::~ContactListener()
 {
@@ -66,9 +70,7 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
         int contactObjectWithBall = ContactObjectWithBall(contactInfo);
 
         switch (contactObjectWithBall) {
-        case WINDMILL:
-            break;
-        case BUMPER_SMALL: {}
+        case BUMPER_SMALL:
         case BUMPER_LARGE: {
             b2Vec2 reflection = GetReflection(bodyB->GetLinearVelocity(), wm.normal);
             bodyB->ApplyLinearImpulse(BUMPER_ELASTICITY * reflection, bodyB->GetPosition(), true);
@@ -77,9 +79,6 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
         case REBOUNDER: {
             b2Vec2 rebound = GetRebound(bodyB->GetLinearVelocity(), wm.normal);
             bodyB->ApplyLinearImpulse(REBOUNDER_ELASTICITY * rebound, bodyB->GetPosition(), true);
-            break;
-        }
-        case WORMHOLE: {
             break;
         }
 
@@ -113,15 +112,6 @@ void ContactListener::EndContact(b2Contact* contact)
 
         Scoring(contactObjectWithBall);
         switch (contactObjectWithBall) {
-        case WINDMILL: {
-            break;
-        }
-        case BUMPER_SMALL or BUMPER_LARGE: {
-            break;
-        }
-        case REBOUNDER: {
-            break;
-        }
         case WORMHOLE: {
             bodyB->SetUserData((void*)(BALL | TRAVELING));
             break;
@@ -159,6 +149,7 @@ void ContactListener::FloatBall()
                 b2Vec2 centroid = ComputeCentroid(intersectionPoints, area);
 
                 ApplyBuoyancy(water, ball, area, b2Vec2(0.0f, -9.8f), centroid);
+                ApplyDrag(ball, water, area, centroid);
             }
 
             it++;
@@ -243,36 +234,18 @@ b2Vec2 ContactListener::GetReflection(b2Vec2 velocity, b2Vec2 normal)
 
 void ContactListener::Scoring(int objectType)
 {
-    switch (objectType) {
-    case WINDMILL: {
-        score_ += SCORE_WINDMILL;
-        break;
-    }
-    case BUMPER_SMALL: {
-        score_ += SCORE_BUMPER_SMALL;
-        break;
-    }
-    case BUMPER_LARGE: {
-        score_ += SCORE_BUMPER_LARGE;
-        break;
-    }
-    case REBOUNDER: {
-        score_ += SCORE_REBOUNDER;
-        break;
-    }
-    case WORMHOLE: {
-        score_ += SCORE_WORMHOLE;
-        break;
-    }
-    case STAR_SMALL: {
-        score_ += SCORE_STAR_SMALL;
-        break;
-    }
-    case STAR_LARGE: {
-        score_ += SCORE_STAR_LARGE;
-        break;
-    }
-    }
+    score_ += scores_[objectType];
+}
+
+void ContactListener::RegisterScore()
+{
+    scores_[WINDMILL] = SCORE_WINDMILL;
+    scores_[BUMPER_SMALL] = SCORE_BUMPER_SMALL;
+    scores_[BUMPER_LARGE] = SCORE_BUMPER_LARGE;
+    scores_[REBOUNDER] = SCORE_REBOUNDER;
+    scores_[WORMHOLE] = SCORE_WORMHOLE;
+    scores_[STAR_SMALL] = SCORE_STAR_SMALL;
+    scores_[STAR_LARGE] = SCORE_STAR_LARGE;
 }
 
 bool ContactListener::IsInside(
@@ -330,4 +303,19 @@ void ContactListener::ApplyBuoyancy(b2Fixture* water, b2Fixture* ball,
     float displacedMass = water->GetDensity() * area;
     b2Vec2 buoyancyForce = displacedMass * -1 * gravity;
     ball->GetBody()->ApplyForce(buoyancyForce, centroid, true);
+}
+
+void ContactListener::ApplyDrag(b2Fixture* box, b2Fixture* water, float area, const b2Vec2 centroid)
+{
+    b2Vec2 dir = box->GetBody()->GetLinearVelocityFromWorldPoint(centroid) -
+        water->GetBody()->GetLinearVelocityFromWorldPoint(centroid);
+
+    float speed = dir.Normalize();
+
+    float dragMag = water->GetDensity() * speed * speed / 2.0f;
+    b2Vec2 dragForce = dragMag * -dir;
+    box->GetBody()->ApplyForce(dragForce, centroid, true);
+
+    float angularDrag = area * -water->GetBody()->GetAngularVelocity();
+    box->GetBody()->ApplyTorque(angularDrag, true);
 }

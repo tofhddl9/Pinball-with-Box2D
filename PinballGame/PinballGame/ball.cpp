@@ -14,18 +14,19 @@ Ball::Ball(b2World* world, const b2Vec2 pos,
     body_def.bullet = true;
     body_ = world->CreateBody(&body_def);
 
-    if (ballType&FLOATING) {
+    if (ballType & FLOATING) {
         float theta;
-        b2Vec2 vs[4];
-        for (int i = 0; i < 4; ++i) {
-            vs[i].Set(radius * cos(b2_pi * i / 2.0f), radius * sin(b2_pi * i / 2.0f));
+        b2Vec2 vs[8];
+        for (int i = 0; i < 8; ++i) {
+            vs[i].Set(radius * -cos(b2_pi * i / 4.0f),
+                      radius * sin(b2_pi * i / 4.0f));
         }
         b2PolygonShape polyShape;
-        polyShape.Set(vs, 4);
+        polyShape.Set(vs, 8);
 
         b2FixtureDef fixture_def;
         fixture_def.shape = &polyShape;
-        fixture_def.density = 1.0f;
+        fixture_def.density = 0.75f;
         fixture_def.friction = 0.36f;
         fixture_def.restitution = 0.2f;
 
@@ -34,8 +35,7 @@ Ball::Ball(b2World* world, const b2Vec2 pos,
         int objectType = (BALL|FLOATING);
         body_->SetUserData((void*)objectType);
     }
-
-    else if (ballType == BALL) {
+    else {
         b2CircleShape circleShape;
         circleShape.m_radius = radius;
 
@@ -54,7 +54,6 @@ Ball::Ball(b2World* world, const b2Vec2 pos,
 
 Ball::~Ball()
 {
-    puts("@@");
     body_->GetWorld()->DestroyBody(body_);
 }
 

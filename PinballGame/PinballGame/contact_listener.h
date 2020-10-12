@@ -3,6 +3,7 @@
 #include <Box2D/Box2D.h>
 #include <vector>
 #include <set>
+#include <map>
 #include "setting.h"
 #include "sound_manager.h"
 
@@ -24,6 +25,8 @@ public:
     
 private:
     int score_;
+    std::map<int, int> scores_;
+
     SoundManager *soundManager_;
     std::set<std::pair<b2Fixture*, b2Fixture *>> waterAndBall;
 
@@ -35,6 +38,7 @@ private:
     b2Vec2 GetReflection(b2Vec2 velocity, b2Vec2 normal);
     
     void Scoring(int objectType);
+    void RegisterScore();
 
     bool IsInside(const b2Vec2 cp1, const b2Vec2 cp2, const b2Vec2 p);
     b2Vec2 GetIntersection(const b2Vec2 cp1, const b2Vec2 cp2,
@@ -44,4 +48,6 @@ private:
         std::vector<b2Vec2>& vertices);
     void ApplyBuoyancy(b2Fixture* water, b2Fixture* ball,
         const float area, const b2Vec2 graivty, const b2Vec2 centroid);
+    void ApplyDrag(b2Fixture* box, b2Fixture* water,
+        float area, const b2Vec2 centroid);
 };

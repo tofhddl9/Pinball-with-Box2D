@@ -31,7 +31,6 @@ void PollKeyboard(unsigned char key, int x, int y)
 		break;
 	case ' ':
 		time++;
-		printf("pressed time : %d\n", time);
 		pinball->PullPiston();
 		break;
 	case 'z':

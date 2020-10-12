@@ -3,6 +3,7 @@
 #include "Box2D/Box2D.h"
 #include "setting.h"
 #include <algorithm>
+
 enum WALL_TYPE {
     LINE_CHAIN,
     LINE_LOOP
