@@ -24,6 +24,7 @@ Pinball::~Pinball()
 void Pinball::AddBall()
 {
     AddBall(b2Vec2(15.8f, -13.0f), 0.55f, BALL);
+    //AddBall(b2Vec2(0.5f, -10.0f), 0.55f, BALL);
 }
 
 void Pinball::AddBall(const b2Vec2 pos, const float radius, const int ballType)
@@ -80,17 +81,15 @@ int Pinball::GetScore()
 
 void Pinball::Step()
 {
-
     world_->Step(time_step_, velocity_iterations_, position_iterations_);
+
+    contactListener_->FloatBall();
 
     ProcessFlipperInput();
     
     MovingWanderer();
 
-    contactListener_->FloatBall();
-
     RemoveBallToBeDeleted();
-
 }
 
 void Pinball::Render()

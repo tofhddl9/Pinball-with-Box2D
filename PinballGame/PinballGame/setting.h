@@ -22,8 +22,8 @@ enum OBJECT_TYPE {
 };
 
 enum BALL_PROPERTY {
-    TRAVELING = 0x10000, // ball into wormhole
-    DIVING = 0x20000,    // ball into water 
+    TRAVELING = 0x10000, // ball enters wormhole
+    DIVING = 0x20000,    // ball first falls into the water
     FLOATING = 0x40000   // floating ball
 };
 
@@ -31,6 +31,7 @@ const float BUMPER_ELASTICITY = 1.0f;
 const float REBOUNDER_ELASTICITY = 1.5f;
 const b2Vec2 REBOUNDER_CORRECTION = b2Vec2(0.0f, 2.0f);
 const b2Vec2 WORMHOLE_DESTINATION = b2Vec2(15.8f, -13.0f);
+//const b2Vec2 WORMHOLE_DESTINATION = b2Vec2(-9.4f, 25.5f);
 
 const int SCORE_WINDMILL = 300;
 const int SCORE_BUMPER_SMALL = 100;

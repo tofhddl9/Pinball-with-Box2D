@@ -46,6 +46,7 @@ void Flipper::Render()
 	glEnd();
 	glPopMatrix();
 }
+
 void Flipper::SetIsKeyDown(bool isKeyDown)
 {
 	isKeyDown_ = isKeyDown;
@@ -58,15 +59,13 @@ bool Flipper::IsKeyDown()
 
 void Flipper::Flip()
 {
-	float speed;
-	speed = isLeft_ ? 20.0f : -20.0f;
+	float speed = isLeft_ ? 20.0f : -20.0f;
 	joint_->SetMotorSpeed(speed);
 }
 
 void Flipper::Unflip()
 {
-	float speed;
-	speed = isLeft_ ? -10.0f : 10.0f;
+	float speed = isLeft_ ? -10.0f : 10.0f;
 	joint_->SetMotorSpeed(speed);
 }
 

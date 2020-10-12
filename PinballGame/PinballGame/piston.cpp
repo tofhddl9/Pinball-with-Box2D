@@ -4,7 +4,6 @@ Piston::Piston(b2World *world, const b2Vec2 pivot_pos,
     const b2Vec2 head_pos, const float radius)
 {
     b2BodyDef body_def;
-    b2PolygonShape box;
     b2FixtureDef fixture;
 
     body_def.type = b2_staticBody;

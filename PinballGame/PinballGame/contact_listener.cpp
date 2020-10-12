@@ -70,8 +70,6 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
         int contactObjectWithBall = ContactObjectWithBall(contactInfo);
 
         switch (contactObjectWithBall) {
-        case WINDMILL:
-            break;
         case BUMPER_SMALL:
         case BUMPER_LARGE: {
             b2Vec2 reflection = GetReflection(bodyB->GetLinearVelocity(), wm.normal);
@@ -81,9 +79,6 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
         case REBOUNDER: {
             b2Vec2 rebound = GetRebound(bodyB->GetLinearVelocity(), wm.normal);
             bodyB->ApplyLinearImpulse(REBOUNDER_ELASTICITY * rebound, bodyB->GetPosition(), true);
-            break;
-        }
-        case WORMHOLE: {
             break;
         }
 
@@ -117,15 +112,6 @@ void ContactListener::EndContact(b2Contact* contact)
 
         Scoring(contactObjectWithBall);
         switch (contactObjectWithBall) {
-        case WINDMILL: {
-            break;
-        }
-        case BUMPER_SMALL or BUMPER_LARGE: {
-            break;
-        }
-        case REBOUNDER: {
-            break;
-        }
         case WORMHOLE: {
             bodyB->SetUserData((void*)(BALL | TRAVELING));
             break;

@@ -13,9 +13,9 @@ Water::Water(b2World* world, b2Vec2 center, b2Vec2 LWH)
     box.SetAsBox(LWH.x, LWH.y);
     
     b2FixtureDef fd;
-    fd.shape = &box;
     fd.isSensor = true;
-    fd.density = 1.15f;
+    fd.shape = &box;
+    fd.density = 1.06f;
     body_->CreateFixture(&fd);
 
     int objectType = WATER;
